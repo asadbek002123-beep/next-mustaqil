@@ -222,8 +222,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* === TESTIMONIALS === */}
-      <section className="testimonials">
+            <section className="testimonials">
         <h2>Bizning mamnun mijozlarimiz</h2>
         <div className="testimonial-list">
           {testimonials.map((t, i) => (

@@ -10,7 +10,6 @@ body {
   color: #111;
 }
 
-/* HEADER */
 header {
   width: 100%;
   border-bottom: 1px solid #eee;
@@ -82,7 +81,6 @@ header {
   cursor: pointer;
 }
 
-/* HERO */
 .hero {
   display: flex;
   justify-content: space-between;
@@ -135,7 +133,6 @@ header {
   border-radius: 12px;
 }
 
-/* KATEGORIYALAR */
 .section-title {
   text-align: center;
   font-size: 26px;
@@ -170,7 +167,6 @@ header {
   border-color: #1a4d2e;
 }
 
-/* MAHSULOTLAR */
 .products {
   display: flex;
   justify-content: center;
@@ -223,7 +219,6 @@ header {
   margin-bottom: 8px;
 }
 
-/* RESPONSIVE */
 @media (max-width: 900px) {
   .hero {
     flex-direction: column;
@@ -238,7 +233,6 @@ header {
     justify-content: center;
   }
 }
-/* === KATEGORIYALAR QISMI === */
 .section-title {
   text-align: center;
   font-size: 28px;
@@ -285,7 +279,6 @@ header {
   box-shadow: 0 4px 12px rgba(255, 123, 0, 0.3);
 }
 
-/* === MAHSULOTLAR QISMI === */
 .products {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -344,7 +337,6 @@ header {
   font-size: 14px;
 }
 
-/* === RESPONSIVE DIZAYN === */
 @media (max-width: 768px) {
   .categories {
     gap: 10px;
@@ -378,7 +370,6 @@ header {
     font-size: 15px;
   }
 }
-/* === FAQ SECTION === */
 .faq-section {
   max-width: 800px;
   margin: 100px auto 60px;
@@ -446,7 +437,6 @@ header {
   color: #fff;
 }
 
-/* === TESTIMONIALS SECTION === */
 .testimonials {
   background: #fff;
   padding: 80px 0;
@@ -516,7 +506,6 @@ header {
     align-items: center;
   }
 }
-/* === FAQ SECTION === */
 .faq-section {
   background-color: #f9f9f9;
   padding: 60px 20px;
