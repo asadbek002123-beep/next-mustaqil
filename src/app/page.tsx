@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import imagefoto3 from "./image/image (8).png";
 import imagefoto2 from "./image/image (6).png";
 import imagefoto1 from "./image/image (7).png";
@@ -13,8 +14,8 @@ import imageKreslo2 from "./image/Frame 33.png";
 import imageUyqu from "./image/image (4).png";
 
 export default function Home() {
+  const router = useRouter();
   const [activeCategory, setActiveCategory] = useState("Chodirlar");
-  const [openFAQ, setOpenFAQ] = useState<number | null>(0);
 
   const categories = [
     { name: "Chodirlar", icon: "⛺" },
@@ -29,8 +30,6 @@ export default function Home() {
       id: 2,
       name: "Yig‘iladigan kreslo",
       price: 240,
-      oldPrice: 260,
-      discount: 20,
       rating: 3.5,
       image: imageKreslo1,
     },
@@ -45,8 +44,6 @@ export default function Home() {
       id: 4,
       name: "Uyqu uchun sumka",
       price: 130,
-      oldPrice: 160,
-      discount: 15,
       rating: 4.5,
       image: imageUyqu,
     },
@@ -54,80 +51,45 @@ export default function Home() {
     { id: 6, name: "Chodir", price: 120, rating: 4.5, image: imagefoto1 },
     { id: 7, name: "Chodir", price: 120, rating: 4.5, image: imagefoto2 },
     { id: 8, name: "Chodir", price: 120, rating: 4.5, image: imagefoto3 },
-    { id: 9, name: "Chodir", price: 120, rating: 4.5, image: imageChodir },
-    { id: 10, name: "Chodir", price: 120, rating: 4.5, image: imageKreslo1 },
-    { id: 11, name: "Chodir", price: 120, rating: 4.5, image: imageKreslo2 },
-    { id: 12, name: "Chodir", price: 120, rating: 4.5, image: imageUyqu },
-  ];
-
-  const faqs = [
-    {
-      q: "Mahsulotlarni qanday buyurtma qilsa bo‘ladi?",
-      a: "Siz tanlagan mahsulotlarni savatga qo‘shib, to‘lov jarayonini davom ettirish orqali buyurtma qilishingiz mumkin. Jarayon juda oson va qulay.",
-    },
-    {
-      q: "To‘lov usullari qanday?",
-      a: "Biz to‘lov uchun naqd pul, karta va onlayn to‘lov tizimlarini qabul qilamiz.",
-    },
-    {
-      q: "Yetkazib berish qancha vaqt oladi?",
-      a: "Odatda 2-5 ish kuni ichida yetkazib beramiz.",
-    },
-    {
-      q: "Mahsulotlarni almashtirish mumkinmi?",
-      a: "Ha, 14 kun ichida almashtirish yoki qaytarish mumkin.",
-    },
-    {
-      q: "Sayohat mahsulotlari tanlashda yordam bera olasizmi?",
-      a: "Albatta, bizning mutaxassislarimiz sizga mos mahsulotni tanlashda yordam beradi.",
-    },
-  ];
-
-  const testimonials = [
-    {
-      name: "Sarah M.",
-      text: "Shopda olgan jihozlarim sifatli va uzoq muddat ishlayapti. Kundalik foydali maslahatlar uchun rahmat!",
-    },
-    {
-      name: "Alex K.",
-      text: "Sifatli mahsulotlar, yaxshi narx va tez yetkazib berish — aynan shu yerda topdim. Tavsiya qilaman!",
-    },
-    {
-      name: "James L.",
-      text: "Ularning xizmatidan juda mamnunman. Lager anjomlari juda qulay va sifatli!",
-    },
   ];
 
   return (
-    <main>
+    <main className="home">
       <header>
         <div className="top-banner">
-          Sign up and get 20% off to your first order.{" "}
-          <a href="#">Sign Up Now</a>
+          Sign up and get 20% off your first order. <a href="#">Sign Up Now</a>
         </div>
 
         <div className="navbar">
           <div className="nav-left">
-            <Image src={imagelogo} alt="logo" width={80} height={80} />
+            <Image src={imagelogo} alt="logo" width={90} height={90} />
             <ul className="nav-links">
               <li>
-                <a href="#">Bosh sahifa</a>
+                <button onClick={() => router.push("/")}>Bosh sahifa</button>
               </li>
               <li>
-                <a href="#">Mahsulotlar</a>
+                <button onClick={() => router.push("/About")}>
+                  Mahsulotlar
+                </button>
               </li>
               <li>
-                <a href="#">Aloqa</a>
+                <button onClick={() => router.push("/Aloqa")}>Aloqa</button>
               </li>
               <li>
-                <a href="#">Blog</a>
+                <button onClick={() => router.push("/Blog")}>Blog</button>
               </li>
             </ul>
           </div>
 
           <div className="nav-right">
             <input type="text" placeholder="Search for products..." />
-            <span className="cart-icon">🛒</span>
+            <span
+              className="cart-icon"
+              onClick={() => router.push("/Korzina")}
+              style={{ cursor: "pointer" }}
+            >
+              🛒
+            </span>
           </div>
         </div>
       </header>
@@ -136,26 +98,10 @@ export default function Home() {
         <div className="hero-text">
           <h1>Zo‘r jihozlar bilan sarguzashtlarni kashf eting</h1>
           <p>
-            Sarguzasht ishqibozlari uchun mo‘ljallangan ochiq havoda kerakli
-            jihozlaringizni kashf eting. Yuqori sifatli chodirlardan qulay lager
-            anjomlargacha — hammasi sizning tajribangizni yuksaltirish uchun.
+            Ochiq havoda sarguzasht qilishni yoqtiradiganlar uchun eng yaxshi
+            chodirlar, kreslolar va jihozlar.
           </p>
-          <button>Xarid qiling</button>
-
-          <div className="hero-stats">
-            <div>
-              <h3>200+</h3>
-              <p>Xalqaro brendlar</p>
-            </div>
-            <div>
-              <h3>2,000+</h3>
-              <p>Yuqori Sifatli Mahsulotlar</p>
-            </div>
-            <div>
-              <h3>30,000+</h3>
-              <p>Baxtli mijozlar</p>
-            </div>
-          </div>
+          <button onClick={() => router.push("/About")}>Xarid qiling</button>
         </div>
 
         <Image
@@ -168,7 +114,7 @@ export default function Home() {
         />
       </section>
 
-      <h2 className="section-title">Kategoriya va Mahsulotlar</h2>
+      <h2 className="section-title">Kategoriyalar</h2>
       <div className="categories">
         {categories.map((cat) => (
           <button
@@ -183,6 +129,7 @@ export default function Home() {
         ))}
       </div>
 
+      <h2 className="section-title">Eng mashhur mahsulotlar</h2>
       <div className="products">
         {products.map((p) => (
           <div key={p.id} className="product-card">
@@ -191,49 +138,62 @@ export default function Home() {
             <div className="rating">
               {"⭐".repeat(Math.round(p.rating))} <span>{p.rating}/5</span>
             </div>
-            <p className="price">
-              ${p.price}
-              {p.oldPrice && <span className="old-price">${p.oldPrice}</span>}
-              {p.discount && <span className="discount">-{p.discount}%</span>}
-            </p>
+            <p className="price">${p.price}</p>
+            <button className="add-btn" onClick={() => router.push("/About")}>
+              Add to Cart
+            </button>
           </div>
         ))}
       </div>
 
       <div className="view-all-container">
-        <button className="view-all-btn">Hammasini ko‘rish</button>
+        <button className="view-all-btn" onClick={() => router.push("/About")}>
+          Hammasini ko‘rish →
+        </button>
       </div>
 
-      <section className="faq-section">
-        <h2>Tez-tez beriladigan savollar</h2>
-        <div className="faq-list">
-          {faqs.map((f, i) => (
-            <div key={i} className={`faq-item ${openFAQ === i ? "open" : ""}`}>
-              <div
-                className="faq-question"
-                onClick={() => setOpenFAQ(openFAQ === i ? null : i)}
-              >
-                <span>{f.q}</span>
-                <button>{openFAQ === i ? "×" : "+"}</button>
-              </div>
-              {openFAQ === i && <p className="faq-answer">{f.a}</p>}
-            </div>
-          ))}
+      <footer className="footer">
+        <div className="footer-top">
+          <div className="footer-col">
+            <h4>KOMPANIYA</h4>
+            <ul>
+              <li>Biz haqimizda</li>
+              <li>Xususiyatlar</li>
+              <li>Ishlash jarayoni</li>
+              <li>Karyera imkoniyatlari</li>
+            </ul>
+          </div>
+          <div className="footer-col">
+            <h4>YORDAM</h4>
+            <ul>
+              <li>Mijozlarni qo‘llab-quvvatlash</li>
+              <li>Yetkazib berish tafsilotlari</li>
+              <li>Shartlar va qoidalar</li>
+              <li>Maxfiylik siyosati</li>
+            </ul>
+          </div>
+          <div className="footer-col">
+            <h4>SAVOLLAR</h4>
+            <ul>
+              <li>Hisob</li>
+              <li>Buyurtmalar</li>
+              <li>To‘lovlar</li>
+            </ul>
+          </div>
+          <div className="footer-col">
+            <h4>RESURSLAR</h4>
+            <ul>
+              <li>Bepul e-kitoblar</li>
+              <li>Dasturlash qo‘llanmalari</li>
+              <li>Blog</li>
+              <li>YouTube playlist</li>
+            </ul>
+          </div>
         </div>
-      </section>
-
-            <section className="testimonials">
-        <h2>Bizning mamnun mijozlarimiz</h2>
-        <div className="testimonial-list">
-          {testimonials.map((t, i) => (
-            <div key={i} className="testimonial-card">
-              <div className="stars">{"⭐".repeat(5)}</div>
-              <p>{t.text}</p>
-              <strong>{t.name}</strong>
-            </div>
-          ))}
+        <div className="footer-bottom">
+          <p>© Piknic 2025. Barcha huquqlar himoyalangan.</p>
         </div>
-      </section>
+      </footer>
     </main>
   );
 }
