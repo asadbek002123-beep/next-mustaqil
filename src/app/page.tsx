@@ -17,6 +17,12 @@ export default function Home() {
   const router = useRouter();
   const [activeCategory, setActiveCategory] = useState("Chodirlar");
 
+  // 🧩 Login uchun yangi state-lar
+  const [showLogin, setShowLogin] = useState(false);
+  const [login, setLogin] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
   const categories = [
     { name: "Chodirlar", icon: "⛺" },
     { name: "Mebel", icon: "🪑" },
@@ -53,36 +59,58 @@ export default function Home() {
     { id: 8, name: "Chodir", price: 120, rating: 4.5, image: imagefoto3 },
   ];
 
+  // 🔑 
+  const handleLogin = (e: any) => {
+    e.preventDefault();
+    if (login === "1" && password === "1") {
+      setError("");
+      setShowLogin(false);
+      localStorage.setItem("isAdmin", "true");
+      router.push("/Admin");
+    } else {
+      setError("Login yoki parol noto‘g‘ri!");
+    }
+  };
+
   return (
     <main className="home">
       <header>
-        <div className="top-banner">
-          Sign up and get 20% off your first order. <a href="#">Sign Up Now</a>
-        </div>
-
         <div className="navbar">
           <div className="nav-left">
-            <Image src={imagelogo} alt="logo" width={90} height={90} />
+            <Image src={imagelogo} alt="logo" width={60} height={60} />
             <ul className="nav-links">
-              <li>
-                <button onClick={() => router.push("/")}>Bosh sahifa</button>
+              <li
+                style={{ cursor: "pointer" }}
+                onClick={() => router.push("/")}
+              >
+                Bosh sahifa
               </li>
-              <li>
-                <button onClick={() => router.push("/About")}>
-                  Mahsulotlar
-                </button>
+              <li
+                style={{ cursor: "pointer" }}
+                onClick={() => router.push("/About")}
+              >
+                Mahsulotlar
               </li>
-              <li>
-                <button onClick={() => router.push("/Aloqa")}>Aloqa</button>
+              <li
+                style={{ cursor: "pointer" }}
+                onClick={() => router.push("/Aloqa")}
+              >
+                Aloqa
               </li>
-              <li>
-                <button onClick={() => router.push("/Blog")}>Blog</button>
+              <li
+                style={{ cursor: "pointer" }}
+                onClick={() => router.push("/Blog")}
+              >
+                Blog
               </li>
             </ul>
           </div>
 
           <div className="nav-right">
             <input type="text" placeholder="Search for products..." />
+            <button className="admin-btn" onClick={() => setShowLogin(true)}>
+              🔓
+            </button>
             <span
               className="cart-icon"
               onClick={() => router.push("/Korzina")}
@@ -93,6 +121,33 @@ export default function Home() {
           </div>
         </div>
       </header>
+
+      {showLogin && (
+        <div className="login-overlay" onClick={() => setShowLogin(false)}>
+          <div className="login-modal" onClick={(e) => e.stopPropagation()}>
+            <h2>Admin kirish</h2>
+            <form onSubmit={handleLogin}>
+              <input
+                type="text"
+                placeholder="Login"
+                value={login}
+                onChange={(e) => setLogin(e.target.value)}
+              />
+              <input
+                type="password"
+                placeholder="Parol"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              {error && <p className="error">{error}</p>}
+              <button type="submit">Kirish</button>
+            </form>
+            <span className="close" onClick={() => setShowLogin(false)}>
+              ✖
+            </span>
+          </div>
+        </div>
+      )}
 
       <section className="hero">
         <div className="hero-text">

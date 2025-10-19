@@ -75,7 +75,7 @@ export default function About() {
         <Image
           src={logo}
           alt="Logo"
-          width={100}
+          width={60}
           height={60}
           style={{ cursor: "pointer" }}
           onClick={() => router.push("/")}
