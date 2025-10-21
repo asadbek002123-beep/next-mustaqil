@@ -17,7 +17,6 @@ export default function Home() {
   const router = useRouter();
   const [activeCategory, setActiveCategory] = useState("Chodirlar");
 
-  // 🧩 Login uchun yangi state-lar
   const [showLogin, setShowLogin] = useState(false);
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
@@ -59,7 +58,7 @@ export default function Home() {
     { id: 8, name: "Chodir", price: 120, rating: 4.5, image: imagefoto3 },
   ];
 
-  // 🔑 
+  // 🔑
   const handleLogin = (e: any) => {
     e.preventDefault();
     if (login === "1" && password === "1") {
@@ -78,13 +77,17 @@ export default function Home() {
         <div className="navbar">
           <div className="nav-left">
             <Image src={imagelogo} alt="logo" width={60} height={60} />
-            <ul className="nav-links">
-              <li
-                style={{ cursor: "pointer" }}
-                onClick={() => router.push("/")}
-              >
-                Bosh sahifa
-              </li>
+            <ul
+              className="nav-links"
+              style={{
+                display: "flex",
+                gap: "40px",
+                listStyle: "none",
+                fontSize: "18px",
+                fontWeight: "500",
+              }}
+            >
+              <li onClick={() => router.push("/")}>Bosh sahifa</li>
               <li
                 style={{ cursor: "pointer" }}
                 onClick={() => router.push("/About")}

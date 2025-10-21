@@ -16,39 +16,60 @@ import imagefoto3 from "../image/image (8).png";
 export default function About() {
   const router = useRouter();
   const [cart, setCart] = useState<any[]>([]);
+  const [products, setProducts] = useState<any[]>([]);
 
-  const products = [
-    { id: 1, name: "Chodir", price: 120, rating: 4.5, image: imageChodir },
+  const defaultProducts = [
+    { id: 1, name: "Chodir", price: 120, rating: 4.5, image: imageChodir.src },
     {
       id: 2,
       name: "Yig‘iladigan kreslo",
       price: 240,
       rating: 3.5,
-      image: imageKreslo1,
+      image: imageKreslo1.src,
     },
     {
       id: 3,
       name: "Qulay lager kreslosi",
       price: 180,
       rating: 4.5,
-      image: imageKreslo2,
+      image: imageKreslo2.src,
     },
     {
       id: 4,
       name: "Uyqu uchun sumka",
       price: 130,
       rating: 4.5,
-      image: imageUyqu,
+      image: imageUyqu.src,
     },
-    { id: 5, name: "Chodir", price: 120, rating: 4.5, image: imagefoto },
-    { id: 6, name: "Chodir", price: 120, rating: 4.5, image: imagefoto1 },
-    { id: 7, name: "Chodir", price: 120, rating: 4.5, image: imagefoto2 },
-    { id: 8, name: "Chodir", price: 120, rating: 4.5, image: imagefoto3 },
+    { id: 5, name: "Chodir", price: 120, rating: 4.5, image: imagefoto.src },
+    { id: 6, name: "Chodir", price: 120, rating: 4.5, image: imagefoto1.src },
+    { id: 7, name: "Chodir", price: 120, rating: 4.5, image: imagefoto2.src },
+    { id: 8, name: "Chodir", price: 120, rating: 4.5, image: imagefoto3.src },
   ];
 
   useEffect(() => {
-    const saved = localStorage.getItem("cart");
-    if (saved) setCart(JSON.parse(saved));
+    const savedCart = localStorage.getItem("cart");
+    if (savedCart) setCart(JSON.parse(savedCart));
+
+    const savedAdminProducts = localStorage.getItem("adminProducts");
+    if (savedAdminProducts) {
+      const adminAdded = JSON.parse(savedAdminProducts);
+
+      const fixedAdmin = adminAdded.map((p: any, index: number) => ({
+        id: p.id || 1000 + index,
+        name: p.name || "Yangi mahsulot",
+        price: p.price || 0,
+        rating: p.rating || 4,
+        image:
+          typeof p.image === "string"
+            ? p.image
+            : p.image?.src || imageChodir.src,
+      }));
+
+      setProducts([...defaultProducts, ...fixedAdmin]);
+    } else {
+      setProducts(defaultProducts);
+    }
   }, []);
 
   const addToCart = (product: any) => {
@@ -99,7 +120,6 @@ export default function About() {
               color: "#16a34a",
               borderBottom: "2px solid #16a34a",
             }}
-            onClick={() => router.push("/About")}
           >
             Mahsulotlar
           </li>
@@ -135,11 +155,7 @@ export default function About() {
 
       <section style={{ padding: "60px" }}>
         <h1
-          style={{
-            fontSize: "32px",
-            fontWeight: "600",
-            marginBottom: "30px",
-          }}
+          style={{ fontSize: "32px", fontWeight: "600", marginBottom: "30px" }}
         >
           Mahsulotlar
         </h1>
@@ -168,6 +184,7 @@ export default function About() {
                 alt={p.name}
                 width={230}
                 height={170}
+                unoptimized
                 style={{
                   objectFit: "contain",
                   margin: "0 auto",
@@ -176,8 +193,8 @@ export default function About() {
               />
               <h3 style={{ fontSize: "18px", marginTop: "10px" }}>{p.name}</h3>
               <div style={{ color: "#eab308", margin: "6px 0" }}>
-                {"⭐".repeat(Math.round(p.rating))}{" "}
-                <span style={{ color: "#444" }}>{p.rating}/5</span>
+                {"⭐".repeat(Math.round(p.rating || 4))}{" "}
+                <span style={{ color: "#444" }}>{p.rating || 4}/5</span>
               </div>
               <p style={{ color: "green", fontWeight: "bold" }}>${p.price}</p>
               <button
@@ -193,7 +210,7 @@ export default function About() {
                   fontWeight: "500",
                 }}
               >
-                Add to Cart
+                Savatchaga qo‘shish
               </button>
             </div>
           ))}
@@ -209,7 +226,7 @@ export default function About() {
           marginTop: "40px",
         }}
       >
-        <p style={{ fontSize: "16px" }}>
+        <p>
           © {new Date().getFullYear()} Tabiat Do‘koni. Barcha huquqlar
           himoyalangan.
         </p>

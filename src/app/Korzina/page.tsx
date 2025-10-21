@@ -19,7 +19,20 @@ export default function Korzina() {
 
   useEffect(() => {
     const saved = localStorage.getItem("cart");
-    if (saved) setCart(JSON.parse(saved));
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        const fixedCart = parsed.map((item: any) => ({
+          ...item,
+          image:
+            typeof item.image === "string" ? item.image : item.image?.src || "",
+          quantity: item.quantity || 1,
+        }));
+        setCart(fixedCart);
+      } catch {
+        setCart([]);
+      }
+    }
   }, []);
 
   const updateQuantity = (id: number, change: number) => {
@@ -47,9 +60,32 @@ export default function Korzina() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
+
+    if (cart.length === 0) {
+      alert("Savat bo‘sh!");
+      return;
+    }
+
+    const existingOrders = JSON.parse(localStorage.getItem("orders") || "[]");
+
+    const newOrder = {
+      id: Date.now(),
+      customer: form,
+      products: cart,
+      total,
+      date: new Date().toLocaleString(),
+      status: "Yangi",
+    };
+
+    const updatedOrders = [...existingOrders, newOrder];
+    localStorage.setItem("orders", JSON.stringify(updatedOrders));
+
     localStorage.removeItem("cart");
     setCart([]);
     setShowModal(false);
+    alert("Buyurtmangiz yuborildi ✅");
+
+    router.push("/Admin");
   };
 
   return (
@@ -83,13 +119,25 @@ export default function Korzina() {
             cart.map((item) => (
               <div key={item.id} className="cart-item">
                 <div className="cart-item-left">
-                  <Image
-                    src={item.image}
-                    alt={item.name}
-                    width={110}
-                    height={90}
-                    className="cart-image"
-                  />
+                  {item.image ? (
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      width={110}
+                      height={90}
+                      className="cart-image"
+                      unoptimized
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        width: 110,
+                        height: 90,
+                        background: "#eee",
+                        borderRadius: "8px",
+                      }}
+                    />
+                  )}
                   <div className="item-info">
                     <h3>{item.name}</h3>
                     <p>${item.price}</p>
@@ -226,49 +274,6 @@ export default function Korzina() {
           </div>
         </div>
       )}
-
-      <footer className="footer">
-        <div className="footer-top">
-          <div className="footer-col">
-            <h4>KOMPANIYA</h4>
-            <ul>
-              <li>Biz haqimizda</li>
-              <li>Xususiyatlar</li>
-              <li>Ishlash jarayoni</li>
-              <li>Karyera imkoniyatlari</li>
-            </ul>
-          </div>
-          <div className="footer-col">
-            <h4>YORDAM</h4>
-            <ul>
-              <li>Mijozlarni qo‘llab-quvvatlash</li>
-              <li>Yetkazib berish tafsilotlari</li>
-              <li>Shartlar va qoidalar</li>
-              <li>Maxfiylik siyosati</li>
-            </ul>
-          </div>
-          <div className="footer-col">
-            <h4>SAVOLLAR</h4>
-            <ul>
-              <li>Hisob</li>
-              <li>Buyurtmalar</li>
-              <li>To‘lovlar</li>
-            </ul>
-          </div>
-          <div className="footer-col">
-            <h4>RESURSLAR</h4>
-            <ul>
-              <li>Bepul e-kitoblar</li>
-              <li>Dasturlash qo‘llanmalari</li>
-              <li>Blog</li>
-              <li>YouTube playlist</li>
-            </ul>
-          </div>
-        </div>
-        <div className="footer-bottom">
-          <p>© Piknic 2025. Barcha huquqlar himoyalangan.</p>
-        </div>
-      </footer>
     </main>
   );
 }
