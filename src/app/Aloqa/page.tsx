@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import Link from "next/link"; 
+import Link from "next/link";
 import { useState } from "react";
 import Image21 from "../image/image (2).png";
 import Image22 from "../image/1-removebg 1.png";
@@ -42,13 +42,22 @@ export default function AloqaPage() {
     <main className="contact-page">
       <nav className="contact-navbar">
         <div className="logo-section">
-          <Image src={Image22} alt="PIKNIC logo" width={40} height={40} />
+          <Image src={Image22} alt="PIKNIC logo" width={60} height={60} />
           <span className="logo-text">PIKNIC</span>
         </div>
 
-        <ul className="nav-links">
+        <ul
+          className="nav-links"
+          style={{
+            display: "flex",
+            gap: "40px",
+            listStyle: "none",
+            fontSize: "18px",
+            fontWeight: "500",
+          }}
+        >
           <li>
-            <Link href="/">Bosh sahifa</Link> 
+            <Link href="/">Bosh sahifa</Link>
           </li>
           <li>
             <Link href="/About">Mahsulotlar</Link>{" "}
@@ -57,7 +66,7 @@ export default function AloqaPage() {
             <Link href="/Aloqa">Aloqa</Link>
           </li>
           <li>
-            <Link href="/Blog">Blog</Link> 
+            <Link href="/Blog">Blog</Link>
           </li>
         </ul>
 
@@ -138,6 +147,48 @@ export default function AloqaPage() {
           </form>
         </div>
       </section>
+      <footer className="footer">
+        <div className="footer-top">
+          <div className="footer-col">
+            <h4>KOMPANIYA</h4>
+            <ul>
+              <li>Biz haqimizda</li>
+              <li>Xususiyatlar</li>
+              <li>Ishlash jarayoni</li>
+              <li>Karyera imkoniyatlari</li>
+            </ul>
+          </div>
+          <div className="footer-col">
+            <h4>YORDAM</h4>
+            <ul>
+              <li>Mijozlarni qo‘llab-quvvatlash</li>
+              <li>Yetkazib berish tafsilotlari</li>
+              <li>Shartlar va qoidalar</li>
+              <li>Maxfiylik siyosati</li>
+            </ul>
+          </div>
+          <div className="footer-col">
+            <h4>SAVOLLAR</h4>
+            <ul>
+              <li>Hisob</li>
+              <li>Buyurtmalar</li>
+              <li>To‘lovlar</li>
+            </ul>
+          </div>
+          <div className="footer-col">
+            <h4>RESURSLAR</h4>
+            <ul>
+              <li>Bepul e-kitoblar</li>
+              <li>Dasturlash qo‘llanmalari</li>
+              <li>Blog</li>
+              <li>YouTube playlist</li>
+            </ul>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <p>© Piknic 2025. Barcha huquqlar himoyalangan.</p>
+        </div>
+      </footer>
     </main>
   );
 }
