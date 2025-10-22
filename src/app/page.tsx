@@ -13,6 +13,11 @@ import imageKreslo1 from "./image/Frame 38.png";
 import imageKreslo2 from "./image/Frame 33.png";
 import imageUyqu from "./image/image (4).png";
 
+import chodirIcon from "./image/tent-removebg-preview-2 1.png";
+import mebelIcon from "./image/furniture 1.png";
+import oshxonaIcon from "./image/Kitchen_Appliances-removebg-preview-2 1.png";
+import uyquIcon from "./image/sleeping_bags-removebg-preview-2 1.png";
+
 export default function Home() {
   const router = useRouter();
   const [activeCategory, setActiveCategory] = useState("Chodirlar");
@@ -23,10 +28,10 @@ export default function Home() {
   const [error, setError] = useState("");
 
   const categories = [
-    { name: "Chodirlar", icon: "⛺" },
-    { name: "Mebel", icon: "🪑" },
-    { name: "Oshxona jihozlari", icon: "🍳" },
-    { name: "Yotish uchun sumkalar", icon: "🛏️" },
+    { name: "Chodirlar", icon: chodirIcon },
+    { name: "Mebel", icon: mebelIcon },
+    { name: "Oshxona jihozlari", icon: oshxonaIcon },
+    { name: "Yotish uchun sumkalar", icon: uyquIcon },
   ];
 
   const products = [
@@ -182,7 +187,8 @@ export default function Home() {
               activeCategory === cat.name ? "active" : ""
             }`}
           >
-            <span>{cat.icon}</span> {cat.name}
+            <Image src={cat.icon} alt={cat.name} width={40} height={40} />
+            <span>{cat.name}</span>
           </button>
         ))}
       </div>

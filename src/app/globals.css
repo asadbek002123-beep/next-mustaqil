@@ -794,7 +794,6 @@ body {
   background: #15803d;
 }
 
-/* ==== FOOTER ==== */
 .footer {
   margin-top: 60px;
   background: #14532d;
@@ -1243,7 +1242,6 @@ body {
   color: #666;
   font-size: 16px;
 }
-/* qulf */
 .login-overlay {
   position: fixed;
   inset: 0;
@@ -1325,7 +1323,6 @@ body {
   }
 }
 
-/* === ALOQA PAGE STYLE === */
 .contact-page {
   font-family: "Poppins", sans-serif;
   color: #1e293b;
@@ -1566,4 +1563,241 @@ body {
 }
 .nav-links {
   margin-left: 280px;
+}
+
+
+
+.blog-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.blog-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: #1a1a1a;
+}
+
+.blog-subtitle {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 50px;
+  line-height: 1.6;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 40px;
+  justify-items: center;
+}
+
+.blog-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+  max-width: 380px;
+}
+
+.blog-card:hover {
+  transform: translateY(-6px);
+}
+
+.blog-image-container {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  overflow: hidden;
+}
+
+.blog-image {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  border-bottom: 1px solid #ddd;
+}
+
+.play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255,255,255,0.8);
+  color: #333;
+  border-radius: 50%;
+  font-size: 30px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.play-button:hover {
+  background: #1f7a1f;
+  color: #fff;
+}
+
+.blog-info {
+  padding: 20px;
+  text-align: left;
+}
+
+.blog-card-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.blog-date {
+  font-size: 0.9rem;
+  color: #444;
+  background: #f3f3f3;
+  padding: 6px 14px;
+  border-radius: 20px;
+  display: inline-block;
+}
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 60px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-text {
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: #1a7a1f;
+}
+
+.nav-links {
+  display: flex;
+  gap: 30px;
+}
+
+.nav-link {
+  color: #222;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: #1a7a1f;
+}
+
+.nav-icons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.search-input {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  outline: none;
+}
+
+.cart-icon {
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.blog-container {
+  max-width: 1200px;
+  margin: 80px auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.blog-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.blog-subtitle {
+  color: #555;
+  max-width: 700px;
+  margin: 0 auto 40px;
+}
+
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+}
+
+.blog-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.blog-card:hover {
+  transform: translateY(-6px);
+}
+
+.blog-image-container {
+  position: relative;
+}
+
+.blog-image {
+  border-radius: 10px 10px 0 0;
+  object-fit: cover;
+}
+
+.play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 50%;
+  font-size: 28px;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.blog-info {
+  padding: 15px 20px 25px;
+  text-align: left;
+}
+
+.blog-card-title {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.blog-date {
+  font-size: 0.85rem;
+  background: #f3f3f3;
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 10px;
+  color: #333;
 }
