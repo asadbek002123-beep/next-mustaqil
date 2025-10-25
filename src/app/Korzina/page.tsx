@@ -85,7 +85,7 @@ export default function Korzina() {
     setShowModal(false);
     alert("Buyurtmangiz yuborildi ✅");
 
-    router.push("/Admin");
+    // router.push("/Admin");
   };
 
   return (
@@ -97,8 +97,8 @@ export default function Korzina() {
         <ul className="nav-links">
           <li onClick={() => router.push("/")}>Bosh sahifa</li>
           <li onClick={() => router.push("/About")}>Mahsulotlar</li>
-          <li>Biz haqimizda</li>
-          <li>Bog‘lanish</li>
+          <li onClick={() => router.push("/Blog")}>Biz haqimizda</li>
+          <li onClick={() => router.push("/Aloqa")}>Bog‘lanish</li>
         </ul>
         <div className="nav-right">
           <button className="cart-icon">

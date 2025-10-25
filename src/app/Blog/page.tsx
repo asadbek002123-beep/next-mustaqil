@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import tentImage from "../image/image (5).png";
 import logo from "../image/1-removebg 1.png";
-
+import rasm from "../image/pick.jpg"
 export default function BlogPage() {
   const blogs = Array(6).fill({
     title:
@@ -98,7 +98,7 @@ export default function BlogPage() {
             <div key={index} className="blog-card">
               <div className="blog-image-container">
                 <Image
-                  src={blog.image}
+                  src={rasm}
                   alt={blog.title}
                   className="blog-image"
                   width={400}

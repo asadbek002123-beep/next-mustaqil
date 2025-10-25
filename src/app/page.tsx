@@ -63,7 +63,6 @@ export default function Home() {
     { id: 8, name: "Chodir", price: 120, rating: 4.5, image: imagefoto3 },
   ];
 
-  // 🔑
   const handleLogin = (e: any) => {
     e.preventDefault();
     if (login === "1" && password === "1") {
@@ -79,7 +78,20 @@ export default function Home() {
   return (
     <main className="home">
       <header>
-        <div className="navbar">
+        <div
+          className="navbar"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "20px 60px",
+            background: "white",
+            boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+            position: "sticky",
+            top: 0,
+            zIndex: 50,
+          }}
+        >
           <div className="nav-left">
             <Image src={imagelogo} alt="logo" width={60} height={60} />
             <ul
@@ -130,6 +142,7 @@ export default function Home() {
         </div>
       </header>
 
+      {/* LOGIN MODAL */}
       {showLogin && (
         <div className="login-overlay" onClick={() => setShowLogin(false)}>
           <div className="login-modal" onClick={(e) => e.stopPropagation()}>
@@ -157,6 +170,7 @@ export default function Home() {
         </div>
       )}
 
+      {/* HERO */}
       <section className="hero">
         <div className="hero-text">
           <h1>Zo‘r jihozlar bilan sarguzashtlarni kashf eting</h1>
@@ -177,6 +191,7 @@ export default function Home() {
         />
       </section>
 
+      {/* CATEGORIES */}
       <h2 className="section-title">Kategoriyalar</h2>
       <div className="categories">
         {categories.map((cat) => (
@@ -193,6 +208,7 @@ export default function Home() {
         ))}
       </div>
 
+      {/* PRODUCTS */}
       <h2 className="section-title">Eng mashhur mahsulotlar</h2>
       <div className="products">
         {products.map((p) => (
@@ -216,6 +232,69 @@ export default function Home() {
         </button>
       </div>
 
+      {/* FAQ SECTION */}
+      <section className="faq-section">
+        <h2 className="section-title">Tez-tez beriladigan savollar</h2>
+
+        <div className="faq-container">
+          {[
+            {
+              question: "Mahsulotlarni qanday buyurtma qilish mumkin?",
+              answer:
+                "Siz tanlagan mahsulotlarni savatchaga qo‘shib, to‘lov jarayonini davom ettirish orqali buyurtma qilishingiz mumkin. Buyurtma jarayoni oddiy va qulay.",
+            },
+            {
+              question: "To‘lov usullari qanday?",
+              answer: "Biz naqd, karta va onlayn to‘lovlarni qabul qilamiz.",
+            },
+            {
+              question: "Yetkazib berish qancha vaqt oladi?",
+              answer: "Buyurtmalar odatda 2-5 ish kuni ichida yetkaziladi.",
+            },
+            {
+              question: "Mahsulotlarni qaytarish mumkinmi?",
+              answer: "Ha, siz mahsulotni 14 kun ichida qaytarishingiz mumkin.",
+            },
+            {
+              question: "Mahsulotlar kafolatlanganmi?",
+              answer: "Har bir mahsulot sifat kafolatiga ega.",
+            },
+            {
+              question:
+                "Sayohat mahsulotlarini tanlashda yordam bera olasizmi?",
+              answer:
+                "Albatta! Bizning mutaxassislarimiz sizga mos mahsulotni tanlashda yordam beradi.",
+            },
+            {
+              question: "Yetkazib berish narxi qancha turadi?",
+              answer: "Yetkazib berish narxi manzilingizga qarab belgilanadi.",
+            },
+            {
+              question: "Agar buyurtma noto‘g‘ri kelsa, nima qilish kerak?",
+              answer:
+                "Agar buyurtmangiz noto‘g‘ri kelsa, biz bilan bog‘laning — bepul almashtiramiz yoki pulingizni qaytaramiz.",
+            },
+            {
+              question: "Mahsulotlarni ko‘rish uchun oflayn do‘koningiz bormi?",
+              answer:
+                "Hozircha yo‘q, lekin tez orada ochilishini rejalashtiryapmiz.",
+            },
+            {
+              question: "Saytingizda qanday mahsulotlarni topish mumkin?",
+              answer:
+                "Bizda chodirlar, kreslolar, oshxona jihozlari va uyqu uchun sumkalar mavjud.",
+            },
+          ].map((item, index) => (
+            <FaqItem
+              key={index}
+              question={item.question}
+              answer={item.answer}
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* FOOTER */}
       <footer className="footer">
         <div className="footer-top">
           <div className="footer-col">
@@ -259,5 +338,19 @@ export default function Home() {
         </div>
       </footer>
     </main>
+  );
+}
+
+/* FAQ ITEM COMPONENT */
+function FaqItem({ question, answer }: { question: string; answer: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className={`faq-item ${open ? "open" : ""}`}>
+      <div className="faq-question" onClick={() => setOpen(!open)}>
+        <span>{question}</span>
+        <button>{open ? "✖" : "+"}</button>
+      </div>
+      {open && <p className="faq-answer">{answer}</p>}
+    </div>
   );
 }
