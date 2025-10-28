@@ -1,11 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import {
-  FaBoxOpen,
-  FaClipboardList,
-  FaTruck,
-  FaPenFancy,
-} from "react-icons/fa";
+import { FaBoxOpen, FaClipboardList, FaTruck, FaPenFancy } from "react-icons/fa";
 
 export default function AdminPage() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -13,8 +8,10 @@ export default function AdminPage() {
   const [orders, setOrders] = useState<any[]>([]);
   const [delivered, setDelivered] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
-  const [messages, setMessages] = useState<any[]>([]); 
+  const [messages, setMessages] = useState<any[]>([]);
+
   const [showModal, setShowModal] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<any | null>(null);
   const [newProduct, setNewProduct] = useState({
     name: "",
     price: "",
@@ -33,25 +30,45 @@ export default function AdminPage() {
     if (savedMessages) setMessages(JSON.parse(savedMessages));
   }, []);
 
-  const addProduct = () => {
+  const handleSaveProduct = () => {
     if (!newProduct.name || !newProduct.price || !newProduct.image) {
       alert("Barcha maydonlarni to‘ldiring!");
       return;
     }
 
-    const newItem = {
-      id: Date.now(),
-      ...newProduct,
-      price: parseFloat(newProduct.price),
-      rating: 4.5,
-    };
-
-    const updated = [...products, newItem];
-    setProducts(updated);
-    localStorage.setItem("adminProducts", JSON.stringify(updated));
+    if (editingProduct) {
+      const updatedProducts = products.map((p) =>
+        p.id === editingProduct.id
+          ? { ...p, ...newProduct, price: parseFloat(newProduct.price) }
+          : p
+      );
+      setProducts(updatedProducts);
+      localStorage.setItem("adminProducts", JSON.stringify(updatedProducts));
+      setEditingProduct(null);
+    } else {
+      const newItem = {
+        id: Date.now(),
+        ...newProduct,
+        price: parseFloat(newProduct.price),
+        rating: 4.5,
+      };
+      const updated = [...products, newItem];
+      setProducts(updated);
+      localStorage.setItem("adminProducts", JSON.stringify(updated));
+    }
 
     setShowModal(false);
     setNewProduct({ name: "", price: "", image: "" });
+  };
+
+  const handleEditProduct = (product: any) => {
+    setEditingProduct(product);
+    setNewProduct({
+      name: product.name,
+      price: product.price.toString(),
+      image: product.image,
+    });
+    setShowModal(true);
   };
 
   const deleteProduct = (id: number) => {
@@ -108,7 +125,7 @@ export default function AdminPage() {
         </div>
 
         <div className="sidebar-buttons">
-          {["products", "buyurtmalar", "yetkazilganlar", "postlar"].map(
+          {["products", "buyurtmalar", "yetkazilganlar", "postlar","arizalar"].map(
             (item) => (
               <button
                 key={item}
@@ -116,9 +133,7 @@ export default function AdminPage() {
                 className={`sidebar-btn ${activeTab === item ? "active" : ""}`}
               >
                 {icons[item]}
-                {sidebarOpen && (
-                  <span style={{ marginLeft: "8px" }}>{item}</span>
-                )}
+                {sidebarOpen && <span style={{ marginLeft: "8px" }}>{item}</span>}
               </button>
             )
           )}
@@ -131,7 +146,11 @@ export default function AdminPage() {
           {activeTab === "products" && (
             <button
               className="add-product-btn"
-              onClick={() => setShowModal(true)}
+              onClick={() => {
+                setEditingProduct(null);
+                setNewProduct({ name: "", price: "", image: "" });
+                setShowModal(true);
+              }}
             >
               ➕ add product
             </button>
@@ -139,6 +158,71 @@ export default function AdminPage() {
         </header>
 
         <main className="main-content">
+          {activeTab === "products" && (
+            <div className="product-list">
+              {products.length === 0 ? (
+                <p>Hozircha mahsulotlar yo‘q 📦</p>
+              ) : (
+                products.map((p) => (
+                  <div
+                    key={p.id}
+                    style={{
+                      background: "#fff",
+                      padding: "10px",
+                      margin: "10px 0",
+                      borderRadius: "8px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                      }}
+                    >
+                      <img src={p.image} width={60} height={60} />
+                      <div>
+                        <h4>{p.name}</h4>
+                        <p>${p.price}</p>
+                      </div>
+                    </div>
+                    <div style={{ display: "flex", gap: "8px" }}>
+                      <button
+                        onClick={() => handleEditProduct(p)}
+                        style={{
+                          background: "#3b82f6",
+                          color: "#fff",
+                          border: "none",
+                          padding: "6px 12px",
+                          borderRadius: "6px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        ✏️
+                      </button>
+                      <button
+                        onClick={() => deleteProduct(p.id)}
+                        style={{
+                          background: "#dc2626",
+                          color: "#fff",
+                          border: "none",
+                          padding: "6px 12px",
+                          borderRadius: "6px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        🗑️
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
+
           {activeTab === "buyurtmalar" && (
             <div>
               <h2>🧾 Yangi Buyurtmalar</h2>
@@ -252,56 +336,7 @@ export default function AdminPage() {
             </div>
           )}
 
-          {activeTab === "products" && (
-            <div className="product-list">
-              {products.length === 0 ? (
-                <p>Hozircha mahsulotlar yo‘q 📦</p>
-              ) : (
-                products.map((p) => (
-                  <div
-                    key={p.id}
-                    style={{
-                      background: "#fff",
-                      padding: "10px",
-                      margin: "10px 0",
-                      borderRadius: "8px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "10px",
-                      }}
-                    >
-                      <img src={p.image} width={60} height={60} />
-                      <div>
-                        <h4>{p.name}</h4>
-                        <p>${p.price}</p>
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => deleteProduct(p.id)}
-                      style={{
-                        background: "#dc2626",
-                        color: "#fff",
-                        border: "none",
-                        padding: "6px 12px",
-                        borderRadius: "6px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      🗑️
-                    </button>
-                  </div>
-                ))
-              )}
-            </div>
-          )}
-
+          {/* === POSTLAR === */}
           {activeTab === "postlar" && (
             <div>
               <h2>💬 Foydalanuvchi xabarlari</h2>
@@ -389,7 +424,9 @@ export default function AdminPage() {
               textAlign: "center",
             }}
           >
-            <h3>🛒 Yangi Mahsulot Qo‘shish</h3>
+            <h3>
+              {editingProduct ? "✏️ Mahsulotni tahrirlash" : "🛒 Yangi Mahsulot Qo‘shish"}
+            </h3>
             <input
               type="text"
               placeholder="Rasm URL"
@@ -418,9 +455,9 @@ export default function AdminPage() {
               style={{ width: "100%", margin: "8px 0", padding: "8px" }}
             />
             <button
-              onClick={addProduct}
+              onClick={handleSaveProduct}
               style={{
-                background: "#16a34a",
+                background: editingProduct ? "#3b82f6" : "#16a34a",
                 color: "white",
                 padding: "10px 20px",
                 border: "none",
@@ -429,7 +466,7 @@ export default function AdminPage() {
                 cursor: "pointer",
               }}
             >
-              ➕ Add
+              {editingProduct ? "💾 Yangilash" : "➕ Qo‘shish"}
             </button>
           </div>
         </div>

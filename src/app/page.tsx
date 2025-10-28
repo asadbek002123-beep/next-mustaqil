@@ -142,7 +142,6 @@ export default function Home() {
         </div>
       </header>
 
-      {/* LOGIN MODAL */}
       {showLogin && (
         <div className="login-overlay" onClick={() => setShowLogin(false)}>
           <div className="login-modal" onClick={(e) => e.stopPropagation()}>
@@ -170,13 +169,16 @@ export default function Home() {
         </div>
       )}
 
-      {/* HERO */}
       <section className="hero">
         <div className="hero-text">
-          <h1>Zo‘r jihozlar bilan sarguzashtlarni kashf eting</h1>
-          <p>
-            Ochiq havoda sarguzasht qilishni yoqtiradiganlar uchun eng yaxshi
-            chodirlar, kreslolar va jihozlar.
+          <h1 className="title1">
+            Zo‘r jihozlar bilan <br /> sarguzashtlarni <br /> kashf eting
+          </h1>
+          <p className="title2">
+            Sarguzasht ishqibozlari uchun moʻljallangan ochiq havoda kerakli{" "}
+            <br /> jihozlarimizni kashf eting. Yuqori sifatli chodirlardan qulay
+            lager <br /> anjomlarigacha, hammasi sizning tajribangizni
+            yuksaltirish uchun.
           </p>
           <button onClick={() => router.push("/About")}>Xarid qiling</button>
         </div>
@@ -191,7 +193,6 @@ export default function Home() {
         />
       </section>
 
-      {/* CATEGORIES */}
       <h2 className="section-title">Kategoriyalar</h2>
       <div className="categories">
         {categories.map((cat) => (
@@ -208,7 +209,6 @@ export default function Home() {
         ))}
       </div>
 
-      {/* PRODUCTS */}
       <h2 className="section-title">Eng mashhur mahsulotlar</h2>
       <div className="products">
         {products.map((p) => (
@@ -232,7 +232,6 @@ export default function Home() {
         </button>
       </div>
 
-      {/* FAQ SECTION */}
       <section className="faq-section">
         <h2 className="section-title">Tez-tez beriladigan savollar</h2>
 
@@ -294,7 +293,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FOOTER */}
       <footer className="footer">
         <div className="footer-top">
           <div className="footer-col">

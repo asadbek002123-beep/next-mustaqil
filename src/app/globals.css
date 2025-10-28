@@ -163,9 +163,8 @@ header {
 
 .category-btn.active,
 .category-btn:hover {
-  background-color: #1a4d2e;
-  color: white;
-  border-color: #1a4d2e;
+  border: 2px solid #eee;
+  color: #333;
 }
 
 .products {
@@ -265,19 +264,20 @@ header {
   align-items: center;
   gap: 8px;
   transition: all 0.3s ease;
+  border: none;
 }
 
 .category-btn:hover {
-  border-color: #ff7b00;
-  background-color: #fff3e6;
-  color: #ff7b00;
+  background-color: #fff;
+  border: 2px solid #ddd;
+  color: #333;
 }
 
 .category-btn.active {
-  background-color: #ff7b00;
-  border-color: #ff7b00;
   color: white;
-  box-shadow: 0 4px 12px rgba(255, 123, 0, 0.3);
+  color: #333;
+
+  /* box-shadow: 0 4px 12px rgba(255, 123, 0, 0.3); */
 }
 
 .products {
@@ -1565,8 +1565,6 @@ body {
   margin-left: 280px;
 }
 
-
-
 .blog-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -1601,7 +1599,7 @@ body {
 .blog-card {
   background: #fff;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   transition: transform 0.3s ease;
   cursor: pointer;
@@ -1631,7 +1629,7 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(255,255,255,0.8);
+  background: rgba(255, 255, 255, 0.8);
   color: #333;
   border-radius: 50%;
   font-size: 30px;
@@ -1802,9 +1800,6 @@ body {
   color: #333;
 }
 
-
-
-
 .faq-section {
   max-width: 800px;
   margin: 100px auto;
@@ -1842,3 +1837,187 @@ body {
   color: #555;
   line-height: 1.5;
 }
+.add-btn {
+  width: 110px;
+  height: 40px;
+  border-radius: 8px;
+  border: none;
+  background-color: #14532d;
+  color: #ddd;
+}
+.title1 {
+  width: 596;
+  height: 170;
+  angle: 0 deg;
+  opacity: 1;
+  font-family: Montserrat;
+  font-weight: 700;
+  font-style: Bold;
+  font-size: 60px;
+  leading-trim: CAP_HEIGHT;
+  line-height: 64px;
+  letter-spacing: 0%;
+  vertical-align: middle;
+}
+.title2 {
+  font-family: Montserrat;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 16px;
+  leading-trim: CAP_HEIGHT;
+  line-height: 22px;
+  letter-spacing: 0%;
+  width: 545;
+  height: 55;
+  angle: 0 deg;
+  opacity: 1;
+}
+.hero-img {
+  width: 614px;
+  height: 423px;
+  angle: 0 deg;
+  opacity: 1;
+  border-radius: 20px;
+}
+
+
+/* ---------- Modal overlay ---------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0; /* top:0; right:0; bottom:0; left:0 */
+  display: flex;
+  align-items: flex-end;   /* pastdan boshlab chiqishi uchun */
+  justify-content: center;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* ---------- Modal box (card) ---------- */
+.modal-box {
+  width: 100%;
+  max-width: 720px;
+  border-radius: 18px 18px 8px 8px; /* yuqori burchaklar ko'proq yumaloq */
+  background: linear-gradient(180deg, #ffffff, #fbfbff);
+  box-shadow: 0 20px 40px rgba(2,6,23,0.35);
+  overflow: hidden;
+  transform: translateY(100%); /* boshlang'ich holat: pastda */
+  animation: slideUp 380ms cubic-bezier(.22,.9,.35,1) forwards;
+}
+
+/* agar modalni pastga qaytarish kerak bo'lsa (opsional) */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+@keyframes slideDown {
+  from {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+/* ---------- Kontent ichidagi elementlar ---------- */
+.modal-content {
+  padding: 18px;
+  text-align: left;
+  position: relative;
+  z-index: 2;
+  background: transparent;
+}
+
+.modal-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 12px;
+  display: block;
+  margin-bottom: 12px;
+  box-shadow: 0 8px 20px rgba(12,20,40,0.12);
+}
+
+.modal-title {
+  font-size: 1.375rem; /* 22px */
+  margin: 6px 0;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.modal-date {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+}
+
+.modal-text {
+  color: #334155;
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+/* ---------- Close button ---------- */
+.modal-close {
+  position: absolute;
+  right: 12px;
+  top: 10px;
+  background: transparent;
+  border: none;
+  font-size: 26px;
+  color: #475569;
+  cursor: pointer;
+  z-index: 3;
+  padding: 6px;
+  border-radius: 8px;
+}
+.modal-close:hover {
+  color: #0f172a;
+  background: rgba(0,0,0,0.04);
+}
+
+/* ---------- Actions (buttons) ---------- */
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 6px;
+}
+.modal-btn {
+  background: #2563eb;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 8px 20px rgba(37,99,235,0.18);
+}
+.modal-btn:hover {
+  background: #1e40af;
+}
+
+/* ---------- Responsive tweaks ---------- */
+@media (max-width: 640px) {
+  .modal-box {
+    max-width: 100%;
+    border-radius: 14px;
+    padding: 0;
+  }
+  .modal-content { padding: 14px; }
+  .modal-title { font-size: 1.125rem; }
+}
+
+/* Optional: agar modalni yopish uchun class yordamida reverse anim qo'shmoqchi bo'lsangiz,
+   JS orqali .modal-box ga .closing qo'shib keyframes slideDown ni chaqirishingiz mumkin.
+*/
