@@ -2,6 +2,8 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { db } from "../firebase/firebase.config"; // 🔹 Firestore ulanishi
+import { collection, addDoc } from "firebase/firestore"; // 🔹 Firestore funksiyalari
 import logo from "../image/1-removebg 1.png";
 
 export default function Korzina() {
@@ -17,6 +19,7 @@ export default function Korzina() {
 
   const router = useRouter();
 
+  // 🔹 Savatchani localStorage’dan olish
   useEffect(() => {
     const saved = localStorage.getItem("cart");
     if (saved) {
@@ -35,6 +38,7 @@ export default function Korzina() {
     }
   }, []);
 
+  // 🔹 Miqdorni yangilash
   const updateQuantity = (id: number, change: number) => {
     const updated = cart.map((item) =>
       item.id === id
@@ -45,12 +49,14 @@ export default function Korzina() {
     localStorage.setItem("cart", JSON.stringify(updated));
   };
 
+  // 🔹 Mahsulotni o‘chirish
   const removeItem = (id: number) => {
     const updated = cart.filter((item) => item.id !== id);
     setCart(updated);
     localStorage.setItem("cart", JSON.stringify(updated));
   };
 
+  // 🔹 Hisob-kitob
   const subtotal = cart.reduce(
     (sum, item) => sum + item.price * (item.quantity || 1),
     0
@@ -58,7 +64,8 @@ export default function Korzina() {
   const discount = subtotal * 0.2;
   const total = subtotal - discount;
 
-  const handleSubmit = (e: any) => {
+  // 🔥 YANGI: Buyurtmani Firestore’ga yuborish
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     if (cart.length === 0) {
@@ -77,19 +84,31 @@ export default function Korzina() {
       status: "Yangi",
     };
 
+    // 🔸 LocalStorage’ga yozish
     const updatedOrders = [...existingOrders, newOrder];
     localStorage.setItem("orders", JSON.stringify(updatedOrders));
 
+    try {
+      // 🔸 Firestore’ga yozish (yo‘l: 1/zg5rPkUUiBwAvcLVDKHL/orders)
+      await addDoc(
+        collection(db, "1", "zg5rPkUUiBwAvcLVDKHL", "orders"),
+        newOrder
+      );
+      console.log("✅ Firestore’ga muvaffaqiyatli yozildi!");
+    } catch (error) {
+      console.error("❌ Firestore xatosi:", error);
+    }
+
+    // 🔸 UI yangilash
     localStorage.removeItem("cart");
     setCart([]);
     setShowModal(false);
     alert("Buyurtmangiz yuborildi ✅");
-
-    // router.push("/Admin");
   };
 
   return (
     <main className="cart-wrapper">
+      {/* 🔹 Navbar */}
       <nav className="navbar">
         <div className="nav-left" onClick={() => router.push("/")}>
           <Image src={logo} alt="logo" width={60} height={60} />
@@ -107,10 +126,12 @@ export default function Korzina() {
         </div>
       </nav>
 
+      {/* 🔹 Sarlavha */}
       <div className="cart-header">
         <h1>Sizning savatingiz</h1>
       </div>
 
+      {/* 🔹 Savatcha joylashuvi */}
       <div className="cart-layout">
         <div className="cart-items">
           {cart.length === 0 ? (
@@ -166,6 +187,7 @@ export default function Korzina() {
           )}
         </div>
 
+        {/* 🔹 Xulosa */}
         <div className="cart-summary">
           <h3>Buyurtma xulosasi</h3>
           <div className="summary-line">
@@ -192,6 +214,7 @@ export default function Korzina() {
         </div>
       </div>
 
+      {/* 🔹 Modal */}
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div
