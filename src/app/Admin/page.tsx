@@ -1,6 +1,20 @@
 "use client";
 import { useState, useEffect } from "react";
-import { FaBoxOpen, FaClipboardList, FaTruck, FaPenFancy } from "react-icons/fa";
+import {
+  FaBoxOpen,
+  FaClipboardList,
+  FaTruck,
+  FaPenFancy,
+} from "react-icons/fa";
+import { db } from "../firebase/firebase.config";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 
 export default function AdminPage() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -18,25 +32,48 @@ export default function AdminPage() {
     image: "",
   });
 
+  // 🔹 LocalStorage + Firebase'dan productlarni yuklash
   useEffect(() => {
     const savedOrders = localStorage.getItem("orders");
     const savedDelivered = localStorage.getItem("deliveredOrders");
-    const savedProducts = localStorage.getItem("adminProducts");
     const savedMessages = localStorage.getItem("messages");
 
     if (savedOrders) setOrders(JSON.parse(savedOrders));
     if (savedDelivered) setDelivered(JSON.parse(savedDelivered));
-    if (savedProducts) setProducts(JSON.parse(savedProducts));
     if (savedMessages) setMessages(JSON.parse(savedMessages));
+
+    const savedProducts = localStorage.getItem("adminProducts");
+    if (savedProducts) {
+      setProducts(JSON.parse(savedProducts));
+    } else {
+      // agar localda bo‘lmasa — Firebase'dan olish
+      loadProductsFromFirebase();
+    }
   }, []);
 
-  const handleSaveProduct = () => {
+  const loadProductsFromFirebase = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "products"));
+      const list: any[] = [];
+      querySnapshot.forEach((docu) =>
+        list.push({ id: docu.id, ...docu.data() })
+      );
+      setProducts(list);
+      localStorage.setItem("adminProducts", JSON.stringify(list));
+    } catch (err) {
+      console.error("Firebase dan yuklashda xato:", err);
+    }
+  };
+
+  // 🔹 Product qo‘shish yoki tahrirlash
+  const handleSaveProduct = async () => {
     if (!newProduct.name || !newProduct.price || !newProduct.image) {
       alert("Barcha maydonlarni to‘ldiring!");
       return;
     }
 
     if (editingProduct) {
+      // 🔸 Tahrirlash
       const updatedProducts = products.map((p) =>
         p.id === editingProduct.id
           ? { ...p, ...newProduct, price: parseFloat(newProduct.price) }
@@ -44,39 +81,67 @@ export default function AdminPage() {
       );
       setProducts(updatedProducts);
       localStorage.setItem("adminProducts", JSON.stringify(updatedProducts));
+
+      // 🔸 Firebase’da ham yangilash
+      try {
+        const docRef = doc(db, "products", editingProduct.id);
+        await updateDoc(docRef, {
+          ...newProduct,
+          price: parseFloat(newProduct.price),
+        });
+        console.log("Firebase yangilandi ✅");
+      } catch (err) {
+        console.error("Firebase yangilashda xato:", err);
+      }
+
       setEditingProduct(null);
     } else {
+      // 🔸 Yangi product qo‘shish
       const newItem = {
-        id: Date.now(),
-        ...newProduct,
+        name: newProduct.name,
         price: parseFloat(newProduct.price),
+        image: newProduct.image,
         rating: 4.5,
+        createdAt: new Date().toISOString(),
       };
-      const updated = [...products, newItem];
-      setProducts(updated);
-      localStorage.setItem("adminProducts", JSON.stringify(updated));
+
+      try {
+        // 🔥 Firebase'ga yozish
+        const docRef = await addDoc(collection(db, "products"), newItem);
+        console.log("Firebase ga yozildi ✅ ID:", docRef.id);
+
+        // 🔹 localStorage va UI’ni yangilash
+        const itemWithId = { id: docRef.id, ...newItem };
+        const updated = [...products, itemWithId];
+        setProducts(updated);
+        localStorage.setItem("adminProducts", JSON.stringify(updated));
+
+        // 🔹 Firebasedan qayta yuklash (synclash uchun)
+        await loadProductsFromFirebase();
+      } catch (err) {
+        console.error("Firebase ga yozishda xato:", err);
+      }
     }
 
     setShowModal(false);
     setNewProduct({ name: "", price: "", image: "" });
   };
 
-  const handleEditProduct = (product: any) => {
-    setEditingProduct(product);
-    setNewProduct({
-      name: product.name,
-      price: product.price.toString(),
-      image: product.image,
-    });
-    setShowModal(true);
-  };
-
-  const deleteProduct = (id: number) => {
+  // 🔹 Product o‘chirish
+  const deleteProduct = async (id: string) => {
     const updated = products.filter((p) => p.id !== id);
     setProducts(updated);
     localStorage.setItem("adminProducts", JSON.stringify(updated));
+
+    try {
+      await deleteDoc(doc(db, "products", id));
+      console.log("Firebase dan o‘chirildi ✅");
+    } catch (err) {
+      console.error("Firebase dan o‘chirishda xato:", err);
+    }
   };
 
+  // 🔹 Buyurtmalar (faqat localStorage)
   const deleteOrder = (id: number) => {
     const updated = orders.filter((o) => o.id !== id);
     setOrders(updated);
@@ -125,7 +190,7 @@ export default function AdminPage() {
         </div>
 
         <div className="sidebar-buttons">
-          {["products", "buyurtmalar", "yetkazilganlar", "postlar","arizalar"].map(
+          {["products", "buyurtmalar", "yetkazilganlar", "postlar"].map(
             (item) => (
               <button
                 key={item}
@@ -133,7 +198,9 @@ export default function AdminPage() {
                 className={`sidebar-btn ${activeTab === item ? "active" : ""}`}
               >
                 {icons[item]}
-                {sidebarOpen && <span style={{ marginLeft: "8px" }}>{item}</span>}
+                {sidebarOpen && (
+                  <span style={{ marginLeft: "8px" }}>{item}</span>
+                )}
               </button>
             )
           )}
@@ -158,6 +225,7 @@ export default function AdminPage() {
         </header>
 
         <main className="main-content">
+          {/* Products Section */}
           {activeTab === "products" && (
             <div className="product-list">
               {products.length === 0 ? (
@@ -191,7 +259,15 @@ export default function AdminPage() {
                     </div>
                     <div style={{ display: "flex", gap: "8px" }}>
                       <button
-                        onClick={() => handleEditProduct(p)}
+                        onClick={() => {
+                          setEditingProduct(p);
+                          setNewProduct({
+                            name: p.name,
+                            price: p.price.toString(),
+                            image: p.image,
+                          });
+                          setShowModal(true);
+                        }}
                         style={{
                           background: "#3b82f6",
                           color: "#fff",
@@ -223,6 +299,7 @@ export default function AdminPage() {
             </div>
           )}
 
+          {/* Buyurtmalar Section */}
           {activeTab === "buyurtmalar" && (
             <div>
               <h2>🧾 Yangi Buyurtmalar</h2>
@@ -230,24 +307,13 @@ export default function AdminPage() {
                 <p>Hozircha buyurtma yo‘q 😔</p>
               ) : (
                 orders.map((order) => (
-                  <div
-                    key={order.id}
-                    className="order-card"
-                    style={{
-                      background: "#fff",
-                      margin: "12px 0",
-                      padding: "15px",
-                      borderRadius: "8px",
-                      boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-                    }}
-                  >
+                  <div key={order.id} className="order-card">
                     <h3>
                       👤 {order.customer.ism} {order.customer.familya}
                     </h3>
                     <p>📞 {order.customer.tel}</p>
                     <p>📍 {order.customer.manzil}</p>
                     <p>🕓 {order.date}</p>
-                    <hr style={{ margin: "10px 0" }} />
                     <ul>
                       {order.products.map((p: any) => (
                         <li key={p.id}>
@@ -255,7 +321,7 @@ export default function AdminPage() {
                         </li>
                       ))}
                     </ul>
-                    <p style={{ marginTop: "10px" }}>
+                    <p>
                       💰 <strong>Jami:</strong> ${order.total.toFixed(0)}
                     </p>
 
@@ -268,7 +334,6 @@ export default function AdminPage() {
                           padding: "6px 12px",
                           border: "none",
                           borderRadius: "6px",
-                          cursor: "pointer",
                         }}
                       >
                         ✅ Yetkazildi
@@ -281,7 +346,6 @@ export default function AdminPage() {
                           padding: "6px 12px",
                           border: "none",
                           borderRadius: "6px",
-                          cursor: "pointer",
                         }}
                       >
                         🗑️ O‘chirish
@@ -293,6 +357,7 @@ export default function AdminPage() {
             </div>
           )}
 
+          {/* Yetkazilganlar Section */}
           {activeTab === "yetkazilganlar" && (
             <div>
               <h2>🚚 Yetkazilgan Buyurtmalar</h2>
@@ -300,16 +365,7 @@ export default function AdminPage() {
                 <p>Hozircha yetkazilgan buyurtmalar yo‘q.</p>
               ) : (
                 delivered.map((order) => (
-                  <div
-                    key={order.id}
-                    style={{
-                      background: "#fff",
-                      margin: "12px 0",
-                      padding: "15px",
-                      borderRadius: "8px",
-                      boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-                    }}
-                  >
+                  <div key={order.id}>
                     <h3>
                       👤 {order.customer.ism} {order.customer.familya}
                     </h3>
@@ -325,7 +381,6 @@ export default function AdminPage() {
                         padding: "6px 12px",
                         border: "none",
                         borderRadius: "6px",
-                        cursor: "pointer",
                       }}
                     >
                       🗑️ O‘chirish
@@ -336,69 +391,46 @@ export default function AdminPage() {
             </div>
           )}
 
-          {/* === POSTLAR === */}
+          {/* Postlar Section */}
           {activeTab === "postlar" && (
             <div>
               <h2>💬 Foydalanuvchi xabarlari</h2>
               {messages.length === 0 ? (
                 <p>Hozircha hech qanday xabar yo‘q.</p>
               ) : (
-                <table
-                  style={{
-                    width: "100%",
-                    marginTop: "20px",
-                    borderCollapse: "collapse",
-                  }}
-                  border={1}
-                  cellPadding={10}
-                >
-                  <thead style={{ background: "#f1f1f1" }}>
-                    <tr>
-                      <th>#</th>
-                      <th>Ism</th>
-                      <th>Familiya</th>
-                      <th>Email</th>
-                      <th>Telefon</th>
-                      <th>Xabar</th>
-                      <th>Sana</th>
-                      <th>Amal</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {messages.map((msg, i) => (
-                      <tr key={msg.id}>
-                        <td>{i + 1}</td>
-                        <td>{msg.firstName}</td>
-                        <td>{msg.lastName}</td>
-                        <td>{msg.email}</td>
-                        <td>{msg.phone}</td>
-                        <td>{msg.message}</td>
-                        <td>{msg.date}</td>
-                        <td>
-                          <button
-                            onClick={() => deleteMessage(msg.id)}
-                            style={{
-                              background: "#dc2626",
-                              color: "white",
-                              border: "none",
-                              borderRadius: "5px",
-                              padding: "5px 10px",
-                              cursor: "pointer",
-                            }}
-                          >
-                            🗑️
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                messages.map((msg) => (
+                  <div
+                    key={msg.id}
+                    style={{ background: "#fff", margin: 8, padding: 10 }}
+                  >
+                    <p>
+                      <strong>
+                        {msg.firstName} {msg.lastName}
+                      </strong>
+                    </p>
+                    <p>{msg.message}</p>
+                    <p>{msg.date}</p>
+                    <button
+                      onClick={() => deleteMessage(msg.id)}
+                      style={{
+                        background: "#dc2626",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: 5,
+                        padding: "5px 10px",
+                      }}
+                    >
+                      🗑️
+                    </button>
+                  </div>
+                ))
               )}
             </div>
           )}
         </main>
       </div>
 
+      {/* 🔹 Modal */}
       {showModal && (
         <div
           className="modal-backdrop"
@@ -410,22 +442,22 @@ export default function AdminPage() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            zIndex: 1000,
           }}
         >
           <div
-            className="modal-content"
             onClick={(e) => e.stopPropagation()}
             style={{
-              background: "white",
-              padding: "20px",
-              borderRadius: "10px",
-              width: "350px",
+              background: "#fff",
+              padding: 20,
+              borderRadius: 10,
+              width: 350,
               textAlign: "center",
             }}
           >
             <h3>
-              {editingProduct ? "✏️ Mahsulotni tahrirlash" : "🛒 Yangi Mahsulot Qo‘shish"}
+              {editingProduct
+                ? "✏️ Mahsulotni tahrirlash"
+                : "🛒 Yangi Mahsulot Qo‘shish"}
             </h3>
             <input
               type="text"

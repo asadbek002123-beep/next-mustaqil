@@ -2,6 +2,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../firebase/firebase.config"; // 🔹 Firestore ulanishi
 import Image21 from "../image/image (2).png";
 import Image22 from "../image/1-removebg 1.png";
 
@@ -14,7 +16,7 @@ export default function AloqaPage() {
     message: "",
   });
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     const oldMessages = JSON.parse(localStorage.getItem("messages") || "[]");
@@ -24,11 +26,21 @@ export default function AloqaPage() {
       date: new Date().toLocaleString(),
     };
 
+    // 🔹 1. LocalStorage ga saqlash (avvalgiday)
     const updatedMessages = [newMessage, ...oldMessages];
     localStorage.setItem("messages", JSON.stringify(updatedMessages));
 
+    // 🔹 2. Firebase'ga yozish (Firestore)
+    try {
+      await addDoc(collection(db, "Aloqa"), newMessage);
+      console.log("✅ Xabar Firebase'ga yuborildi!");
+    } catch (error) {
+      console.error("❌ Firebasega yozishda xato:", error);
+    }
+
     alert("Xabaringiz yuborildi ✅");
 
+    // 🔹 3. Forma tozalash
     setForm({
       firstName: "",
       lastName: "",
@@ -147,6 +159,7 @@ export default function AloqaPage() {
           </form>
         </div>
       </section>
+
       <footer className="footer">
         <div className="footer-top">
           <div className="footer-col">
