@@ -79,7 +79,7 @@ export default function About() {
   };
 
   return (
-    <main style={{ background: "#f9fafb", minHeight: "100vh" }}>
+    <>
       <nav
         style={{
           display: "flex",
@@ -137,20 +137,10 @@ export default function About() {
           </li>
         </ul>
 
-        <button
-          onClick={() => router.push("/Korzina")}
-          style={{
-            background: "#16a34a",
-            color: "#fff",
-            padding: "10px 20px",
-            borderRadius: "10px",
-            border: "none",
-            cursor: "pointer",
-            fontWeight: "500",
-          }}
-        >
-          🛒 Korzina ({cart.length})
-        </button>
+        <div className="nav-right">
+          <input type="text" placeholder="Search for products..." />
+          <button className="cart-btn">🛒</button>
+        </div>
       </nav>
 
       <section style={{ padding: "60px" }}>
@@ -217,20 +207,50 @@ export default function About() {
         </div>
       </section>
 
-      <footer
-        style={{
-          background: "#1a1a1a",
-          color: "white",
-          textAlign: "center",
-          padding: "25px 10px",
-          marginTop: "40px",
-        }}
-      >
-        <p>
-          © {new Date().getFullYear()} Tabiat Do‘koni. Barcha huquqlar
-          himoyalangan.
-        </p>
-      </footer>
-    </main>
+      <>
+        <footer className="footer">
+          <div className="footer-top">
+            <div className="footer-col">
+              <h4>KOMPANIYA</h4>
+              <ul>
+                <li>Biz haqimizda</li>
+                <li>Xususiyatlar</li>
+                <li>Ishlash jarayoni</li>
+                <li>Karyera imkoniyatlari</li>
+              </ul>
+            </div>
+            <div className="footer-col">
+              <h4>YORDAM</h4>
+              <ul>
+                <li>Mijozlarni qo‘llab-quvvatlash</li>
+                <li>Yetkazib berish tafsilotlari</li>
+                <li>Shartlar va qoidalar</li>
+                <li>Maxfiylik siyosati</li>
+              </ul>
+            </div>
+            <div className="footer-col">
+              <h4>SAVOLLAR</h4>
+              <ul>
+                <li>Hisob</li>
+                <li>Buyurtmalar</li>
+                <li>To‘lovlar</li>
+              </ul>
+            </div>
+            <div className="footer-col">
+              <h4>RESURSLAR</h4>
+              <ul>
+                <li>Bepul e-kitoblar</li>
+                <li>Dasturlash qo‘llanmalari</li>
+                <li>Blog</li>
+                <li>YouTube playlist</li>
+              </ul>
+            </div>
+          </div>
+          <div className="footer-bottom">
+            <p>© Piknic 2025. Barcha huquqlar himoyalangan.</p>
+          </div>
+        </footer>
+      </>
+    </>
   );
 }

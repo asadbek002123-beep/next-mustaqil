@@ -19,7 +19,6 @@ export default function Korzina() {
 
   const router = useRouter();
 
-  // 🔹 Savatchani localStorage’dan olish
   useEffect(() => {
     const saved = localStorage.getItem("cart");
     if (saved) {
@@ -38,7 +37,6 @@ export default function Korzina() {
     }
   }, []);
 
-  // 🔹 Miqdorni yangilash
   const updateQuantity = (id: number, change: number) => {
     const updated = cart.map((item) =>
       item.id === id
@@ -49,14 +47,12 @@ export default function Korzina() {
     localStorage.setItem("cart", JSON.stringify(updated));
   };
 
-  // 🔹 Mahsulotni o‘chirish
   const removeItem = (id: number) => {
     const updated = cart.filter((item) => item.id !== id);
     setCart(updated);
     localStorage.setItem("cart", JSON.stringify(updated));
   };
 
-  // 🔹 Hisob-kitob
   const subtotal = cart.reduce(
     (sum, item) => sum + item.price * (item.quantity || 1),
     0
@@ -64,7 +60,6 @@ export default function Korzina() {
   const discount = subtotal * 0.2;
   const total = subtotal - discount;
 
-  // 🔥 YANGI: Buyurtmani Firestore’ga yuborish
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
@@ -84,12 +79,10 @@ export default function Korzina() {
       status: "Yangi",
     };
 
-    // 🔸 LocalStorage’ga yozish
     const updatedOrders = [...existingOrders, newOrder];
     localStorage.setItem("orders", JSON.stringify(updatedOrders));
 
     try {
-      // 🔸 Firestore’ga yozish (yo‘l: 1/zg5rPkUUiBwAvcLVDKHL/orders)
       await addDoc(
         collection(db, "1", "zg5rPkUUiBwAvcLVDKHL", "orders"),
         newOrder
@@ -99,7 +92,6 @@ export default function Korzina() {
       console.error("❌ Firestore xatosi:", error);
     }
 
-    // 🔸 UI yangilash
     localStorage.removeItem("cart");
     setCart([]);
     setShowModal(false);
@@ -108,14 +100,13 @@ export default function Korzina() {
 
   return (
     <main className="cart-wrapper">
-      {/* 🔹 Navbar */}
       <nav className="navbar">
         <div className="nav-left" onClick={() => router.push("/")}>
           <Image src={logo} alt="logo" width={60} height={60} />
         </div>
         <ul className="nav-links">
           <li onClick={() => router.push("/")}>Bosh sahifa</li>
-          <li onClick={() => router.push("/About")}>Mahsulotlar</li>
+          <li onClick={() => router.push("/Product")}>Mahsulotlar</li>
           <li onClick={() => router.push("/Blog")}>Biz haqimizda</li>
           <li onClick={() => router.push("/Aloqa")}>Bog‘lanish</li>
         </ul>

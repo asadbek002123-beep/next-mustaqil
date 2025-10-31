@@ -76,9 +76,82 @@ export default function Home() {
   };
 
   return (
-    <main className="home">
+    <>
       <header>
-        <div
+        <nav
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "20px 60px",
+            background: "white",
+            boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+            position: "sticky",
+            top: 0,
+            zIndex: 50,
+          }}
+        >
+          <Image
+            src={imagelogo}
+            alt="Logo"
+            width={60}
+            height={60}
+            style={{ cursor: "pointer" }}
+            onClick={() => router.push("/")}
+          />
+          <ul
+            style={{
+              display: "flex",
+              gap: "40px",
+              listStyle: "none",
+              fontSize: "18px",
+              fontWeight: "500",
+            }}
+          >
+            <li
+              style={{
+                cursor: "pointer",
+                color: "#16a34a",
+                borderBottom: "2px solid #16a34a",
+              }}
+            >
+              Bosh sahifa
+            </li>
+            <li
+              style={{ cursor: "pointer" }}
+              onClick={() => router.push("/Product")}
+            >
+              Mahsulotlar
+            </li>
+            <li
+              style={{ cursor: "pointer" }}
+              onClick={() => router.push("/Aloqa")}
+            >
+              Aloqa
+            </li>
+            <li
+              style={{ cursor: "pointer" }}
+              onClick={() => router.push("/Blog")}
+            >
+              Blog
+            </li>
+          </ul>
+
+          <div className="nav-right">
+            <input type="text" placeholder="Search for products..." />
+            <button className="admin-btn" onClick={() => setShowLogin(true)}>
+              🔓
+            </button>
+            <span
+              className="cart-icon"
+              onClick={() => router.push("/Korzina")}
+              style={{ cursor: "pointer" }}
+            >
+              🛒
+            </span>
+          </div>
+        </nav>
+        {/* <div
           className="navbar"
           style={{
             display: "flex",
@@ -106,7 +179,7 @@ export default function Home() {
               <li onClick={() => router.push("/")}>Bosh sahifa</li>
               <li
                 style={{ cursor: "pointer" }}
-                onClick={() => router.push("/About")}
+                onClick={() => router.push("/Product")}
               >
                 Mahsulotlar
               </li>
@@ -138,7 +211,7 @@ export default function Home() {
               🛒
             </span>
           </div>
-        </div>
+        </div> */}
       </header>
 
       {showLogin && (
@@ -334,7 +407,7 @@ export default function Home() {
           <p>© Piknic 2025. Barcha huquqlar himoyalangan.</p>
         </div>
       </footer>
-    </main>
+    </>
   );
 }
 

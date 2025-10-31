@@ -51,11 +51,10 @@ export default function AloqaPage() {
   };
 
   return (
-    <main className="contact-page">
+    <>
       <nav className="contact-navbar">
         <div className="logo-section">
           <Image src={Image22} alt="PIKNIC logo" width={60} height={60} />
-          <span className="logo-text">PIKNIC</span>
         </div>
 
         <ul
@@ -72,7 +71,7 @@ export default function AloqaPage() {
             <Link href="/">Bosh sahifa</Link>
           </li>
           <li>
-            <Link href="/About">Mahsulotlar</Link>{" "}
+            <Link href="/Product">Mahsulotlar</Link>{" "}
           </li>
           <li className="active">
             <Link href="/Aloqa">Aloqa</Link>
@@ -202,6 +201,6 @@ export default function AloqaPage() {
           <p>© Piknic 2025. Barcha huquqlar himoyalangan.</p>
         </div>
       </footer>
-    </main>
+    </>
   );
 }

@@ -15,22 +15,75 @@ export default function BlogPage() {
 
   return (
     <>
-      <header className="navbar">
+      <header
+        className="navbar"
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "20px 60px",
+          background: "white",
+          boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+          position: "sticky",
+          top: 0,
+          zIndex: 50,
+        }}
+      >
         <div className="navbar-left">
           <Image src={logo} alt="Logo" width={60} height={60} />
         </div>
 
         <nav className="nav-links">
-          <Link href="/" className="nav-link">
+          <Link
+            href="/"
+            className="nav-link"
+            style={{
+              display: "flex",
+              gap: "40px",
+              listStyle: "none",
+              fontSize: "18px",
+              fontWeight: "500",
+            }}
+          >
             Bosh sahifa
           </Link>
-          <Link href="/About" className="nav-link">
+          <Link
+            href="/Product"
+            className="nav-link"
+            style={{
+              display: "flex",
+              gap: "40px",
+              listStyle: "none",
+              fontSize: "18px",
+              fontWeight: "500",
+            }}
+          >
             Mahsulotlar
           </Link>
-          <Link href="/Aloqa" className="nav-link">
+          <Link
+            href="/Aloqa"
+            className="nav-link"
+            style={{
+              display: "flex",
+              gap: "40px",
+              listStyle: "none",
+              fontSize: "18px",
+              fontWeight: "500",
+            }}
+          >
             Aloqa
           </Link>
-          <Link href="/Blog" className="nav-link active">
+          <Link
+            href="/Blog"
+            className="nav-link active"
+            style={{
+              display: "flex",
+              gap: "40px",
+              listStyle: "none",
+              fontSize: "18px",
+              fontWeight: "500",
+            }}
+          >
             Blog
           </Link>
         </nav>

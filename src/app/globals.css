@@ -507,7 +507,7 @@ header {
   }
 }
 .faq-section {
-  background-color: #f9f9f9;
+  background-color: white;
   padding: 60px 20px;
   text-align: center;
 }
@@ -533,7 +533,7 @@ header {
 }
 
 .view-all-btn:hover {
-  background-color: #488ad0;
+  background-color: #65d048;
   transform: translateY(-2px);
   color: white;
 }
@@ -1882,9 +1882,9 @@ body {
 
 .modal-overlay {
   position: fixed;
-  inset: 0; 
+  inset: 0;
   display: flex;
-  align-items: flex-end; 
+  align-items: flex-end;
   justify-content: center;
   background: rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(6px);
@@ -2015,7 +2015,6 @@ body {
   }
 }
 
-
 .blog-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -2065,7 +2064,6 @@ body {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 
 main {
   background: linear-gradient(180deg, #f9fafb 0%, #eef2ff 100%);
@@ -2183,4 +2181,12 @@ main {
   .post-body {
     font-size: 0.95rem;
   }
+}
+.view-all-btn {
+  width: 250px;
+  margin-right: 500px;
+}
+.view-all-container {
+  display: flex;
+  justify-content: center;
 }
