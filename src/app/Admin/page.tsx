@@ -32,7 +32,6 @@ export default function AdminPage() {
     image: "",
   });
 
-  // 🔹 LocalStorage + Firebase'dan productlarni yuklash
   useEffect(() => {
     const savedOrders = localStorage.getItem("orders");
     const savedDelivered = localStorage.getItem("deliveredOrders");
@@ -46,7 +45,6 @@ export default function AdminPage() {
     if (savedProducts) {
       setProducts(JSON.parse(savedProducts));
     } else {
-      // agar localda bo‘lmasa — Firebase'dan olish
       loadProductsFromFirebase();
     }
   }, []);
@@ -65,7 +63,6 @@ export default function AdminPage() {
     }
   };
 
-  // 🔹 Product qo‘shish yoki tahrirlash
   const handleSaveProduct = async () => {
     if (!newProduct.name || !newProduct.price || !newProduct.image) {
       alert("Barcha maydonlarni to‘ldiring!");
@@ -73,7 +70,6 @@ export default function AdminPage() {
     }
 
     if (editingProduct) {
-      // 🔸 Tahrirlash
       const updatedProducts = products.map((p) =>
         p.id === editingProduct.id
           ? { ...p, ...newProduct, price: parseFloat(newProduct.price) }
@@ -82,7 +78,6 @@ export default function AdminPage() {
       setProducts(updatedProducts);
       localStorage.setItem("adminProducts", JSON.stringify(updatedProducts));
 
-      // 🔸 Firebase’da ham yangilash
       try {
         const docRef = doc(db, "products", editingProduct.id);
         await updateDoc(docRef, {
@@ -96,7 +91,6 @@ export default function AdminPage() {
 
       setEditingProduct(null);
     } else {
-      // 🔸 Yangi product qo‘shish
       const newItem = {
         name: newProduct.name,
         price: parseFloat(newProduct.price),
@@ -106,17 +100,14 @@ export default function AdminPage() {
       };
 
       try {
-        // 🔥 Firebase'ga yozish
         const docRef = await addDoc(collection(db, "products"), newItem);
         console.log("Firebase ga yozildi ✅ ID:", docRef.id);
 
-        // 🔹 localStorage va UI’ni yangilash
         const itemWithId = { id: docRef.id, ...newItem };
         const updated = [...products, itemWithId];
         setProducts(updated);
         localStorage.setItem("adminProducts", JSON.stringify(updated));
 
-        // 🔹 Firebasedan qayta yuklash (synclash uchun)
         await loadProductsFromFirebase();
       } catch (err) {
         console.error("Firebase ga yozishda xato:", err);
@@ -127,7 +118,6 @@ export default function AdminPage() {
     setNewProduct({ name: "", price: "", image: "" });
   };
 
-  // 🔹 Product o‘chirish
   const deleteProduct = async (id: string) => {
     const updated = products.filter((p) => p.id !== id);
     setProducts(updated);
@@ -141,7 +131,6 @@ export default function AdminPage() {
     }
   };
 
-  // 🔹 Buyurtmalar (faqat localStorage)
   const deleteOrder = (id: number) => {
     const updated = orders.filter((o) => o.id !== id);
     setOrders(updated);
@@ -225,7 +214,6 @@ export default function AdminPage() {
         </header>
 
         <main className="main-content">
-          {/* Products Section */}
           {activeTab === "products" && (
             <div className="product-list">
               {products.length === 0 ? (
@@ -299,7 +287,6 @@ export default function AdminPage() {
             </div>
           )}
 
-          {/* Buyurtmalar Section */}
           {activeTab === "buyurtmalar" && (
             <div>
               <h2>🧾 Yangi Buyurtmalar</h2>
@@ -357,7 +344,6 @@ export default function AdminPage() {
             </div>
           )}
 
-          {/* Yetkazilganlar Section */}
           {activeTab === "yetkazilganlar" && (
             <div>
               <h2>🚚 Yetkazilgan Buyurtmalar</h2>
@@ -391,7 +377,6 @@ export default function AdminPage() {
             </div>
           )}
 
-          {/* Postlar Section */}
           {activeTab === "postlar" && (
             <div>
               <h2>💬 Foydalanuvchi xabarlari</h2>
@@ -430,7 +415,6 @@ export default function AdminPage() {
         </main>
       </div>
 
-      {/* 🔹 Modal */}
       {showModal && (
         <div
           className="modal-backdrop"

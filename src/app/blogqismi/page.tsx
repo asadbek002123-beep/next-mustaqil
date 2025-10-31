@@ -1,20 +1,11 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
+import image from "../image/pick.jpg";
 import logo from "../image/1-removebg 1.png";
-import rasm from "../image/pick.jpg";
 
-export default function BlogPage() {
-  const blogs = Array(6).fill({
-    title:
-      "Tabiatning Qiziqarli Jihatlari: Sarg‘aygan Amazon O‘rmonlari Haqida Qiziqarli Faktlar",
-    date: "Payshanba, 2024-yil 8-yanvar",
-    image: rasm,
-  });
-
+export default function PostPage() {
   return (
-    <>
+    <main>
       <header className="navbar">
         <div className="navbar-left">
           <Image src={logo} alt="Logo" width={60} height={60} />
@@ -44,41 +35,36 @@ export default function BlogPage() {
           <span className="cart-icon">🛒</span>
         </div>
       </header>
+      <div className="post-container">
+        <div className="post-image">
+          <Image
+            src={image}
+            alt="Tabiatning Qiziqarli Jihatlari"
+            fill
+            sizes="(min-width: 768px) 50vw, 100vw"
+          />
+        </div>
 
-      <div className="blog-container">
-        <h1 className="blog-title">Sayohat va Lager Blogi</h1>
-        <p className="blog-subtitle">
-          Sayohatni sevuvchilar uchun qiziqarli hikoyalar, foydali maslahatlar
-          va lager hayoti haqida ko‘rsatmalar.
-        </p>
+        <div className="post-content">
+          <Link href="/Blog" className="post-backlink">
+            ← Barcha postlarga qaytish
+          </Link>
 
-        <div className="blog-grid">
-          {blogs.map((blog, index) => (
-            <Link
-              href="/blogqismi"
-              key={index}
-              className="blog-card cursor-pointer transition-transform hover:scale-105 block"
-            >
-              <div className="blog-image-container relative overflow-hidden rounded-xl">
-                <Image
-                  src={blog.image}
-                  alt={blog.title}
-                  className="blog-image"
-                  width={400}
-                  height={260}
-                />
-                <div className="absolute inset-0 bg-black/30 opacity-0 hover:opacity-100 flex items-center justify-center text-white text-5xl transition">
-                  ▶
-                </div>
-              </div>
-              <div className="blog-info">
-                <h3 className="blog-card-title font-semibold mt-2">
-                  {blog.title}
-                </h3>
-                <p className="blog-date text-gray-600">{blog.date}</p>
-              </div>
-            </Link>
-          ))}
+          <h1 className="post-title">Tabiatning Qiziqarli Jihatlari</h1>
+          <p className="post-date">Payshanba, 2024-yil 8-yanvar</p>
+
+          <p className="post-summary">
+            Amazon o‘rmonlarining sirli hayoti va ularning ekologik ahamiyati
+            haqida qiziqarli ma’lumotlar.
+          </p>
+
+          <div className="post-body">
+            Amazon o‘rmonlari dunyodagi eng katta tropik o‘rmonlardan biridir.
+            Ular Yerdagi kislorodning katta qismini ishlab chiqaradi va
+            millionlab hayvonlar hamda o‘simlik turlariga uy bo‘ladi. Bu joy
+            sayyohlar uchun sarguzasht, ekologlar uchun esa tadqiqot manbai
+            hisoblanadi.
+          </div>
         </div>
       </div>
       <footer className="footer">
@@ -123,6 +109,6 @@ export default function BlogPage() {
           <p>© Piknic 2025. Barcha huquqlar himoyalangan.</p>
         </div>
       </footer>
-    </>
+    </main>
   );
 }

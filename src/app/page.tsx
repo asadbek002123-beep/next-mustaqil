@@ -95,7 +95,6 @@ export default function Home() {
           <div className="nav-left">
             <Image src={imagelogo} alt="logo" width={60} height={60} />
             <ul
-              className="nav-links"
               style={{
                 display: "flex",
                 gap: "40px",
@@ -339,7 +338,6 @@ export default function Home() {
   );
 }
 
-/* FAQ ITEM COMPONENT */
 function FaqItem({ question, answer }: { question: string; answer: string }) {
   const [open, setOpen] = useState(false);
   return (
