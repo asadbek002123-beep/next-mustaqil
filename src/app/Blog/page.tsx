@@ -1,11 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import logo from "../image/1-removebg 1.png";
+import { useRouter } from "next/navigation";
 import rasm from "../image/pick.jpg";
+import logo from "../image/1-removebg 1.png";
 
 export default function BlogPage() {
+  const router = useRouter();
+
   const blogs = Array(6).fill({
     title:
       "Tabiatning Qiziqarli Jihatlari: Sarg‘aygan Amazon O‘rmonlari Haqida Qiziqarli Faktlar",
@@ -15,8 +17,8 @@ export default function BlogPage() {
 
   return (
     <>
-      <header
-        className="navbar"
+      {/* 🔹 Yangi Navbar */}
+      <nav
         style={{
           display: "flex",
           justifyContent: "space-between",
@@ -29,75 +31,63 @@ export default function BlogPage() {
           zIndex: 50,
         }}
       >
-        <div className="navbar-left">
-          <Image src={logo} alt="Logo" width={60} height={60} />
-        </div>
+        <Image
+          src={logo}
+          alt="Logo"
+          width={60}
+          height={60}
+          style={{ cursor: "pointer" }}
+          onClick={() => router.push("/")}
+        />
 
-        <nav className="nav-links">
-          <Link
-            href="/"
-            className="nav-link"
-            style={{
-              display: "flex",
-              gap: "40px",
-              listStyle: "none",
-              fontSize: "18px",
-              fontWeight: "500",
-            }}
-          >
+        <ul
+          style={{
+            display: "flex",
+            gap: "40px",
+            listStyle: "none",
+            fontSize: "18px",
+            fontWeight: "500",
+          }}
+        >
+          <li style={{ cursor: "pointer" }} onClick={() => router.push("/")}>
             Bosh sahifa
-          </Link>
-          <Link
-            href="/Product"
-            className="nav-link"
-            style={{
-              display: "flex",
-              gap: "40px",
-              listStyle: "none",
-              fontSize: "18px",
-              fontWeight: "500",
-            }}
+          </li>
+          <li
+            style={{ cursor: "pointer" }}
+            onClick={() => router.push("/Product")}
           >
             Mahsulotlar
-          </Link>
-          <Link
-            href="/Aloqa"
-            className="nav-link"
-            style={{
-              display: "flex",
-              gap: "40px",
-              listStyle: "none",
-              fontSize: "18px",
-              fontWeight: "500",
-            }}
+          </li>
+          <li
+            style={{ cursor: "pointer" }}
+            onClick={() => router.push("/Aloqa")}
           >
             Aloqa
-          </Link>
-          <Link
-            href="/Blog"
-            className="nav-link active"
+          </li>
+          <li
             style={{
-              display: "flex",
-              gap: "40px",
-              listStyle: "none",
-              fontSize: "18px",
-              fontWeight: "500",
+              cursor: "pointer",
+              color: "#16a34a",
+              borderBottom: "2px solid #16a34a",
             }}
           >
             Blog
-          </Link>
-        </nav>
+          </li>
+        </ul>
 
-        <div className="nav-icons">
-          <input
-            type="text"
-            placeholder="Search for products..."
-            className="search-input"
-          />
-          <span className="cart-icon">🛒</span>
+        <div className="nav-right">
+          <input type="text" placeholder="Search for products..." />
+          <button
+            className="cart-btn"
+            onClick={() => router.push("/Korzina")}
+            style={{ cursor: "pointer" }}
+          >
+            🛒
+          </button>
         </div>
-      </header>
+      </nav>
 
+      {/* 🔹 Blog kontenti */}
       <div className="blog-container">
         <h1 className="blog-title">Sayohat va Lager Blogi</h1>
         <p className="blog-subtitle">
@@ -107,10 +97,10 @@ export default function BlogPage() {
 
         <div className="blog-grid">
           {blogs.map((blog, index) => (
-            <Link
-              href="/blogqismi"
+            <div
               key={index}
               className="blog-card cursor-pointer transition-transform hover:scale-105 block"
+              onClick={() => router.push("/blogqismi")}
             >
               <div className="blog-image-container relative overflow-hidden rounded-xl">
                 <Image
@@ -130,10 +120,12 @@ export default function BlogPage() {
                 </h3>
                 <p className="blog-date text-gray-600">{blog.date}</p>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       </div>
+
+      {/* 🔹 Footer */}
       <footer className="footer">
         <div className="footer-top">
           <div className="footer-col">

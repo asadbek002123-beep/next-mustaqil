@@ -1,13 +1,15 @@
 "use client";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
-import { db } from "../firebase/firebase.config"; // 🔹 Firestore ulanishi
+import { db } from "../firebase/firebase.config";
+import logo from "../image/1-removebg 1.png";
 import Image21 from "../image/image (2).png";
-import Image22 from "../image/1-removebg 1.png";
 
 export default function AloqaPage() {
+  const router = useRouter();
+
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -26,11 +28,11 @@ export default function AloqaPage() {
       date: new Date().toLocaleString(),
     };
 
-    // 🔹 1. LocalStorage ga saqlash (avvalgiday)
+    // 🔹 LocalStorage ga saqlash
     const updatedMessages = [newMessage, ...oldMessages];
     localStorage.setItem("messages", JSON.stringify(updatedMessages));
 
-    // 🔹 2. Firebase'ga yozish (Firestore)
+    // 🔹 Firebase'ga yozish
     try {
       await addDoc(collection(db, "Aloqa"), newMessage);
       console.log("✅ Xabar Firebase'ga yuborildi!");
@@ -40,7 +42,7 @@ export default function AloqaPage() {
 
     alert("Xabaringiz yuborildi ✅");
 
-    // 🔹 3. Forma tozalash
+    // 🔹 Forma tozalash
     setForm({
       firstName: "",
       lastName: "",
@@ -52,13 +54,30 @@ export default function AloqaPage() {
 
   return (
     <>
-      <nav className="contact-navbar">
-        <div className="logo-section">
-          <Image src={Image22} alt="PIKNIC logo" width={60} height={60} />
-        </div>
+      {/* 🔹 Yangi navbar */}
+      <nav
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "20px 60px",
+          background: "white",
+          boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+          position: "sticky",
+          top: 0,
+          zIndex: 50,
+        }}
+      >
+        <Image
+          src={logo}
+          alt="Logo"
+          width={60}
+          height={60}
+          style={{ cursor: "pointer" }}
+          onClick={() => router.push("/")}
+        />
 
         <ul
-          className="nav-links"
           style={{
             display: "flex",
             gap: "40px",
@@ -67,26 +86,45 @@ export default function AloqaPage() {
             fontWeight: "500",
           }}
         >
-          <li>
-            <Link href="/">Bosh sahifa</Link>
+          <li style={{ cursor: "pointer" }} onClick={() => router.push("/")}>
+            Bosh sahifa
           </li>
-          <li>
-            <Link href="/Product">Mahsulotlar</Link>{" "}
+          <li
+            style={{ cursor: "pointer" }}
+            onClick={() => router.push("/Product")}
+          >
+            Mahsulotlar
           </li>
-          <li className="active">
-            <Link href="/Aloqa">Aloqa</Link>
+          <li
+            style={{
+              cursor: "pointer",
+              color: "#16a34a",
+              borderBottom: "2px solid #16a34a",
+            }}
+          >
+            Aloqa
           </li>
-          <li>
-            <Link href="/Blog">Blog</Link>
+          <li
+            style={{ cursor: "pointer" }}
+            onClick={() => router.push("/Blog")}
+          >
+            Blog
           </li>
         </ul>
 
         <div className="nav-right">
           <input type="text" placeholder="Search for products..." />
-          <button className="cart-btn">🛒</button>
+          <button
+            className="cart-btn"
+            onClick={() => router.push("/Korzina")}
+            style={{ cursor: "pointer" }}
+          >
+            🛒
+          </button>
         </div>
       </nav>
 
+      {/* 🔹 Qolgan sahifa qismi */}
       <section className="contact-hero">
         <Image src={Image21} alt="Camping tents" fill className="hero-bg" />
         <div className="hero-text">

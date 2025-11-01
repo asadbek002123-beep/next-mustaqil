@@ -220,67 +220,43 @@ export default function AdminPage() {
                 <p>Hozircha mahsulotlar yo‘q 📦</p>
               ) : (
                 products.map((p) => (
-                  <div
-                    key={p.id}
-                    style={{
-                      background: "#fff",
-                      padding: "10px",
-                      margin: "10px 0",
-                      borderRadius: "8px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "10px",
-                      }}
-                    >
-                      <img src={p.image} width={60} height={60} />
-                      <div>
-                        <h4>{p.name}</h4>
-                        <p>${p.price}</p>
-                      </div>
-                    </div>
-                    <div style={{ display: "flex", gap: "8px" }}>
-                      <button
-                        onClick={() => {
-                          setEditingProduct(p);
-                          setNewProduct({
-                            name: p.name,
-                            price: p.price.toString(),
-                            image: p.image,
-                          });
-                          setShowModal(true);
-                        }}
-                        style={{
-                          background: "#3b82f6",
-                          color: "#fff",
-                          border: "none",
-                          padding: "6px 12px",
-                          borderRadius: "6px",
-                          cursor: "pointer",
-                        }}
-                      >
-                        ✏️
-                      </button>
-                      <button
-                        onClick={() => deleteProduct(p.id)}
-                        style={{
-                          background: "#dc2626",
-                          color: "#fff",
-                          border: "none",
-                          padding: "6px 12px",
-                          borderRadius: "6px",
-                          cursor: "pointer",
-                        }}
-                      >
-                        🗑️
-                      </button>
-                    </div>
+                  <div className="product-list">
+                    {products.length === 0 ? (
+                      <p>Hozircha mahsulotlar yo‘q 📦</p>
+                    ) : (
+                      products.map((p) => (
+                        <div key={p.id} className="product-card">
+                          <img src={p.image} alt={p.name} />
+                          <div className="product-info">
+                            <h4>{p.name}</h4>
+                            <p>${p.price}</p>
+                            <div className="rating">⭐ {p.rating}</div>
+                          </div>
+                          <div className="product-actions">
+                            <button
+                              className="edit-btn"
+                              onClick={() => {
+                                setEditingProduct(p);
+                                setNewProduct({
+                                  name: p.name,
+                                  price: p.price.toString(),
+                                  image: p.image,
+                                });
+                                setShowModal(true);
+                              }}
+                            >
+                              ✏️ Edit
+                            </button>
+                            <button
+                              className="delete-btn"
+                              onClick={() => deleteProduct(p.id)}
+                            >
+                              🗑️ Delete
+                            </button>
+                          </div>
+                        </div>
+                      ))
+                    )}
                   </div>
                 ))
               )}
@@ -288,7 +264,7 @@ export default function AdminPage() {
           )}
 
           {activeTab === "buyurtmalar" && (
-            <div>
+            <div className="order-card">
               <h2>🧾 Yangi Buyurtmalar</h2>
               {orders.length === 0 ? (
                 <p>Hozircha buyurtma yo‘q 😔</p>
@@ -345,7 +321,7 @@ export default function AdminPage() {
           )}
 
           {activeTab === "yetkazilganlar" && (
-            <div>
+            <div className="delivered-card">
               <h2>🚚 Yetkazilgan Buyurtmalar</h2>
               {delivered.length === 0 ? (
                 <p>Hozircha yetkazilgan buyurtmalar yo‘q.</p>
@@ -378,7 +354,7 @@ export default function AdminPage() {
           )}
 
           {activeTab === "postlar" && (
-            <div>
+            <div className="post-card">
               <h2>💬 Foydalanuvchi xabarlari</h2>
               {messages.length === 0 ? (
                 <p>Hozircha hech qanday xabar yo‘q.</p>

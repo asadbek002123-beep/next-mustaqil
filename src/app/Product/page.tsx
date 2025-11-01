@@ -139,7 +139,13 @@ export default function About() {
 
         <div className="nav-right">
           <input type="text" placeholder="Search for products..." />
-          <button className="cart-btn">🛒</button>
+          <button
+            className="cart-btn"
+            onClick={() => router.push("/Korzina")}
+            style={{ cursor: "pointer" }}
+          >
+            🛒
+          </button>
         </div>
       </nav>
 
