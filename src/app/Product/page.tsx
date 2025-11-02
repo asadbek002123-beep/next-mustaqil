@@ -5,47 +5,11 @@ import { useRouter } from "next/navigation";
 
 import logo from "../image/1-removebg 1.png";
 import imageChodir from "../image/image (3).png";
-import imageKreslo1 from "../image/Frame 38.png";
-import imageKreslo2 from "../image/Frame 33.png";
-import imageUyqu from "../image/image (4).png";
-import imagefoto from "../image/image (5).png";
-import imagefoto1 from "../image/image (7).png";
-import imagefoto2 from "../image/image (6).png";
-import imagefoto3 from "../image/image (8).png";
 
 export default function About() {
   const router = useRouter();
   const [cart, setCart] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
-
-  const defaultProducts = [
-    { id: 1, name: "Chodir", price: 120, rating: 4.5, image: imageChodir.src },
-    {
-      id: 2,
-      name: "Yig‘iladigan kreslo",
-      price: 240,
-      rating: 3.5,
-      image: imageKreslo1.src,
-    },
-    {
-      id: 3,
-      name: "Qulay lager kreslosi",
-      price: 180,
-      rating: 4.5,
-      image: imageKreslo2.src,
-    },
-    {
-      id: 4,
-      name: "Uyqu uchun sumka",
-      price: 130,
-      rating: 4.5,
-      image: imageUyqu.src,
-    },
-    { id: 5, name: "Chodir", price: 120, rating: 4.5, image: imagefoto.src },
-    { id: 6, name: "Chodir", price: 120, rating: 4.5, image: imagefoto1.src },
-    { id: 7, name: "Chodir", price: 120, rating: 4.5, image: imagefoto2.src },
-    { id: 8, name: "Chodir", price: 120, rating: 4.5, image: imagefoto3.src },
-  ];
 
   useEffect(() => {
     const savedCart = localStorage.getItem("cart");
@@ -66,9 +30,9 @@ export default function About() {
             : p.image?.src || imageChodir.src,
       }));
 
-      setProducts([...defaultProducts, ...fixedAdmin]);
+      setProducts(fixedAdmin);
     } else {
-      setProducts(defaultProducts);
+      setProducts([]); // agar Admin'dan kelmagan bo‘lsa, hech narsa ko‘rsatmaydi
     }
   }, []);
 
@@ -80,6 +44,7 @@ export default function About() {
 
   return (
     <>
+      {/* === NAVBAR === */}
       <nav
         style={{
           display: "flex",
@@ -149,6 +114,7 @@ export default function About() {
         </div>
       </nav>
 
+      {/* === PRODUCT SECTION === */}
       <section style={{ padding: "60px" }}>
         <h1
           style={{ fontSize: "32px", fontWeight: "600", marginBottom: "30px" }}
@@ -156,107 +122,113 @@ export default function About() {
           Mahsulotlar
         </h1>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-            gap: "25px",
-          }}
-        >
-          {products.map((p) => (
-            <div
-              key={p.id}
-              style={{
-                background: "#fff",
-                borderRadius: "20px",
-                boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-                padding: "20px",
-                textAlign: "center",
-                transition: "transform 0.2s ease",
-              }}
-            >
-              <Image
-                src={p.image}
-                alt={p.name}
-                width={230}
-                height={170}
-                unoptimized
+        {products.length === 0 ? (
+          <p style={{ fontSize: "18px", color: "#666" }}>
+            Hozircha mahsulotlar mavjud emas.
+          </p>
+        ) : (
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+              gap: "25px",
+            }}
+          >
+            {products.map((p) => (
+              <div
+                key={p.id}
                 style={{
-                  objectFit: "contain",
-                  margin: "0 auto",
-                  borderRadius: "10px",
-                }}
-              />
-              <h3 style={{ fontSize: "18px", marginTop: "10px" }}>{p.name}</h3>
-              <div style={{ color: "#eab308", margin: "6px 0" }}>
-                {"⭐".repeat(Math.round(p.rating || 4))}{" "}
-                <span style={{ color: "#444" }}>{p.rating || 4}/5</span>
-              </div>
-              <p style={{ color: "green", fontWeight: "bold" }}>${p.price}</p>
-              <button
-                onClick={() => addToCart(p)}
-                style={{
-                  marginTop: "10px",
-                  background: "#16a34a",
-                  color: "white",
-                  border: "none",
-                  padding: "10px 20px",
-                  borderRadius: "10px",
-                  cursor: "pointer",
-                  fontWeight: "500",
+                  background: "#fff",
+                  borderRadius: "20px",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                  padding: "20px",
+                  textAlign: "center",
                 }}
               >
-                Savatchaga qo‘shish
-              </button>
-            </div>
-          ))}
-        </div>
+                <Image
+                  src={p.image}
+                  alt={p.name}
+                  width={230}
+                  height={170}
+                  unoptimized
+                  style={{
+                    objectFit: "contain",
+                    margin: "0 auto",
+                    borderRadius: "10px",
+                  }}
+                />
+                <h3 style={{ fontSize: "18px", marginTop: "10px" }}>
+                  {p.name}
+                </h3>
+                <div style={{ color: "#eab308", margin: "6px 0" }}>
+                  {"⭐".repeat(Math.round(p.rating || 4))}{" "}
+                  <span style={{ color: "#444" }}>{p.rating || 4}/5</span>
+                </div>
+                <p style={{ color: "green", fontWeight: "bold" }}>${p.price}</p>
+                <button
+                  onClick={() => addToCart(p)}
+                  style={{
+                    marginTop: "10px",
+                    background: "#16a34a",
+                    color: "white",
+                    border: "none",
+                    padding: "10px 20px",
+                    borderRadius: "10px",
+                    cursor: "pointer",
+                    fontWeight: "500",
+                  }}
+                >
+                  Savatchaga qo‘shish
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
-      <>
-        <footer className="footer">
-          <div className="footer-top">
-            <div className="footer-col">
-              <h4>KOMPANIYA</h4>
-              <ul>
-                <li>Biz haqimizda</li>
-                <li>Xususiyatlar</li>
-                <li>Ishlash jarayoni</li>
-                <li>Karyera imkoniyatlari</li>
-              </ul>
-            </div>
-            <div className="footer-col">
-              <h4>YORDAM</h4>
-              <ul>
-                <li>Mijozlarni qo‘llab-quvvatlash</li>
-                <li>Yetkazib berish tafsilotlari</li>
-                <li>Shartlar va qoidalar</li>
-                <li>Maxfiylik siyosati</li>
-              </ul>
-            </div>
-            <div className="footer-col">
-              <h4>SAVOLLAR</h4>
-              <ul>
-                <li>Hisob</li>
-                <li>Buyurtmalar</li>
-                <li>To‘lovlar</li>
-              </ul>
-            </div>
-            <div className="footer-col">
-              <h4>RESURSLAR</h4>
-              <ul>
-                <li>Bepul e-kitoblar</li>
-                <li>Dasturlash qo‘llanmalari</li>
-                <li>Blog</li>
-                <li>YouTube playlist</li>
-              </ul>
-            </div>
+      {/* === FOOTER === */}
+      <footer className="footer">
+        <div className="footer-top">
+          <div className="footer-col">
+            <h4>KOMPANIYA</h4>
+            <ul>
+              <li>Biz haqimizda</li>
+              <li>Xususiyatlar</li>
+              <li>Ishlash jarayoni</li>
+              <li>Karyera imkoniyatlari</li>
+            </ul>
           </div>
-          <div className="footer-bottom">
-            <p>© Piknic 2025. Barcha huquqlar himoyalangan.</p>
+          <div className="footer-col">
+            <h4>YORDAM</h4>
+            <ul>
+              <li>Mijozlarni qo‘llab-quvvatlash</li>
+              <li>Yetkazib berish tafsilotlari</li>
+              <li>Shartlar va qoidalar</li>
+              <li>Maxfiylik siyosati</li>
+            </ul>
           </div>
-        </footer>
-      </>
+          <div className="footer-col">
+            <h4>SAVOLLAR</h4>
+            <ul>
+              <li>Hisob</li>
+              <li>Buyurtmalar</li>
+              <li>To‘lovlar</li>
+            </ul>
+          </div>
+          <div className="footer-col">
+            <h4>RESURSLAR</h4>
+            <ul>
+              <li>Bepul e-kitoblar</li>
+              <li>Dasturlash qo‘llanmalari</li>
+              <li>Blog</li>
+              <li>YouTube playlist</li>
+            </ul>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <p>© Piknic 2025. Barcha huquqlar himoyalangan.</p>
+        </div>
+      </footer>
     </>
   );
 }

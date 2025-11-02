@@ -84,7 +84,6 @@ export default function AdminPage() {
           ...newProduct,
           price: parseFloat(newProduct.price),
         });
-        console.log("Firebase yangilandi ✅");
       } catch (err) {
         console.error("Firebase yangilashda xato:", err);
       }
@@ -101,14 +100,10 @@ export default function AdminPage() {
 
       try {
         const docRef = await addDoc(collection(db, "products"), newItem);
-        console.log("Firebase ga yozildi ✅ ID:", docRef.id);
-
         const itemWithId = { id: docRef.id, ...newItem };
         const updated = [...products, itemWithId];
         setProducts(updated);
         localStorage.setItem("adminProducts", JSON.stringify(updated));
-
-        await loadProductsFromFirebase();
       } catch (err) {
         console.error("Firebase ga yozishda xato:", err);
       }
@@ -125,7 +120,6 @@ export default function AdminPage() {
 
     try {
       await deleteDoc(doc(db, "products", id));
-      console.log("Firebase dan o‘chirildi ✅");
     } catch (err) {
       console.error("Firebase dan o‘chirishda xato:", err);
     }
@@ -220,43 +214,35 @@ export default function AdminPage() {
                 <p>Hozircha mahsulotlar yo‘q 📦</p>
               ) : (
                 products.map((p) => (
-                  <div className="product-list">
-                    {products.length === 0 ? (
-                      <p>Hozircha mahsulotlar yo‘q 📦</p>
-                    ) : (
-                      products.map((p) => (
-                        <div key={p.id} className="product-card">
-                          <img src={p.image} alt={p.name} />
-                          <div className="product-info">
-                            <h4>{p.name}</h4>
-                            <p>${p.price}</p>
-                            <div className="rating">⭐ {p.rating}</div>
-                          </div>
-                          <div className="product-actions">
-                            <button
-                              className="edit-btn"
-                              onClick={() => {
-                                setEditingProduct(p);
-                                setNewProduct({
-                                  name: p.name,
-                                  price: p.price.toString(),
-                                  image: p.image,
-                                });
-                                setShowModal(true);
-                              }}
-                            >
-                              ✏️ Edit
-                            </button>
-                            <button
-                              className="delete-btn"
-                              onClick={() => deleteProduct(p.id)}
-                            >
-                              🗑️ Delete
-                            </button>
-                          </div>
-                        </div>
-                      ))
-                    )}
+                  <div key={p.id} className="product-card">
+                    <img src={p.image} alt={p.name} />
+                    <div className="product-info">
+                      <h4>{p.name}</h4>
+                      <p>${p.price}</p>
+                      <div className="rating">⭐ {p.rating}</div>
+                    </div>
+                    <div className="product-actions">
+                      <button
+                        className="edit-btn"
+                        onClick={() => {
+                          setEditingProduct(p);
+                          setNewProduct({
+                            name: p.name,
+                            price: p.price.toString(),
+                            image: p.image,
+                          });
+                          setShowModal(true);
+                        }}
+                      >
+                        ✏️ Edit
+                      </button>
+                      <button
+                        className="delete-btn"
+                        onClick={() => deleteProduct(p.id)}
+                      >
+                        🗑️ Delete
+                      </button>
+                    </div>
                   </div>
                 ))
               )}
