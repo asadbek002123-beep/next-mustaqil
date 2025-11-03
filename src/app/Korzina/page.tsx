@@ -196,7 +196,7 @@ export default function Korzina() {
 
           <div className="promo-section">
             <input type="text" placeholder="Promo code qo‘shing" />
-            <button>Tekshirish</button>
+            <button className="tek">Tekshirish</button>
           </div>
 
           <button className="checkout-btn" onClick={() => setShowModal(true)}>

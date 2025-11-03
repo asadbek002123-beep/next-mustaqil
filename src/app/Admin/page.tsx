@@ -5,6 +5,7 @@ import {
   FaClipboardList,
   FaTruck,
   FaPenFancy,
+  FaBloggerB,
 } from "react-icons/fa";
 import { db } from "../firebase/firebase.config";
 import {
@@ -23,12 +24,20 @@ export default function AdminPage() {
   const [delivered, setDelivered] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [messages, setMessages] = useState<any[]>([]);
+  const [blogs, setBlogs] = useState<any[]>([]);
 
   const [showModal, setShowModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState<any | null>(null);
   const [newProduct, setNewProduct] = useState({
     name: "",
     price: "",
+    image: "",
+  });
+
+  const [showBlogModal, setShowBlogModal] = useState(false);
+  const [newBlog, setNewBlog] = useState({
+    title: "",
+    content: "",
     image: "",
   });
 
@@ -47,6 +56,8 @@ export default function AdminPage() {
     } else {
       loadProductsFromFirebase();
     }
+
+    loadBlogsFromFirebase();
   }, []);
 
   const loadProductsFromFirebase = async () => {
@@ -59,7 +70,20 @@ export default function AdminPage() {
       setProducts(list);
       localStorage.setItem("adminProducts", JSON.stringify(list));
     } catch (err) {
-      console.error("Firebase dan yuklashda xato:", err);
+      console.error("Firebase dan mahsulotlarni yuklashda xato:", err);
+    }
+  };
+
+  const loadBlogsFromFirebase = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "blogs"));
+      const list: any[] = [];
+      querySnapshot.forEach((docu) =>
+        list.push({ id: docu.id, ...docu.data() })
+      );
+      setBlogs(list);
+    } catch (err) {
+      console.error("Firebase dan bloglarni yuklashda xato:", err);
     }
   };
 
@@ -113,6 +137,39 @@ export default function AdminPage() {
     setNewProduct({ name: "", price: "", image: "" });
   };
 
+  const handleAddBlog = async () => {
+    if (!newBlog.title || !newBlog.content || !newBlog.image) {
+      alert("Barcha maydonlarni to‘ldiring!");
+      return;
+    }
+
+    const blogItem = {
+      title: newBlog.title,
+      content: newBlog.content,
+      image: newBlog.image,
+      createdAt: new Date().toISOString(),
+    };
+
+    try {
+      const docRef = await addDoc(collection(db, "blogs"), blogItem);
+      const added = { id: docRef.id, ...blogItem };
+      setBlogs([...blogs, added]);
+      setShowBlogModal(false);
+      setNewBlog({ title: "", content: "", image: "" });
+    } catch (err) {
+      console.error("Blog qo‘shishda xato:", err);
+    }
+  };
+
+  const deleteBlog = async (id: string) => {
+    try {
+      await deleteDoc(doc(db, "blogs", id));
+      setBlogs(blogs.filter((b) => b.id !== id));
+    } catch (err) {
+      console.error("Blogni o‘chirishda xato:", err);
+    }
+  };
+
   const deleteProduct = async (id: string) => {
     const updated = products.filter((p) => p.id !== id);
     setProducts(updated);
@@ -160,6 +217,7 @@ export default function AdminPage() {
     buyurtmalar: <FaClipboardList size={18} />,
     yetkazilganlar: <FaTruck size={18} />,
     postlar: <FaPenFancy size={18} />,
+    blog: <FaBloggerB size={18} />,
   };
 
   return (
@@ -173,7 +231,7 @@ export default function AdminPage() {
         </div>
 
         <div className="sidebar-buttons">
-          {["products", "buyurtmalar", "yetkazilganlar", "postlar"].map(
+          {["products", "buyurtmalar", "yetkazilganlar", "postlar", "blog"].map(
             (item) => (
               <button
                 key={item}
@@ -205,9 +263,18 @@ export default function AdminPage() {
               ➕ add product
             </button>
           )}
+          {activeTab === "blog" && (
+            <button
+              className="add-product-btn"
+              onClick={() => setShowBlogModal(true)}
+            >
+              📝 Yangi blog
+            </button>
+          )}
         </header>
 
         <main className="main-content">
+          {/* Products */}
           {activeTab === "products" && (
             <div className="product-list">
               {products.length === 0 ? (
@@ -249,8 +316,9 @@ export default function AdminPage() {
             </div>
           )}
 
+          {/* Buyurtmalar */}
           {activeTab === "buyurtmalar" && (
-            <div className="order-card">
+            <div>
               <h2>🧾 Yangi Buyurtmalar</h2>
               {orders.length === 0 ? (
                 <p>Hozircha buyurtma yo‘q 😔</p>
@@ -306,8 +374,9 @@ export default function AdminPage() {
             </div>
           )}
 
+          {/* Yetkazilganlar */}
           {activeTab === "yetkazilganlar" && (
-            <div className="delivered-card">
+            <div>
               <h2>🚚 Yetkazilgan Buyurtmalar</h2>
               {delivered.length === 0 ? (
                 <p>Hozircha yetkazilgan buyurtmalar yo‘q.</p>
@@ -339,8 +408,9 @@ export default function AdminPage() {
             </div>
           )}
 
+          {/* Xabarlar */}
           {activeTab === "postlar" && (
-            <div className="post-card">
+            <div>
               <h2>💬 Foydalanuvchi xabarlari</h2>
               {messages.length === 0 ? (
                 <p>Hozircha hech qanday xabar yo‘q.</p>
@@ -374,9 +444,58 @@ export default function AdminPage() {
               )}
             </div>
           )}
+
+          {/* BLOG */}
+          {activeTab === "blog" && (
+            <div className="blog-section">
+              <h2>📰 Blog maqolalari</h2>
+              {blogs.length === 0 ? (
+                <p>Hozircha bloglar yo‘q 😔</p>
+              ) : (
+                blogs.map((b) => (
+                  <div
+                    key={b.id}
+                    style={{
+                      background: "#fff",
+                      margin: "10px 0",
+                      padding: "12px",
+                      borderRadius: "8px",
+                    }}
+                  >
+                    <img
+                      src={b.image}
+                      alt={b.title}
+                      style={{
+                        width: "100%",
+                        height: "180px",
+                        objectFit: "cover",
+                        borderRadius: "8px",
+                      }}
+                    />
+                    <h3 style={{ marginTop: "8px" }}>{b.title}</h3>
+                    <p>{b.content}</p>
+                    <button
+                      onClick={() => deleteBlog(b.id)}
+                      style={{
+                        background: "#dc2626",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "6px",
+                        padding: "6px 10px",
+                        marginTop: "6px",
+                      }}
+                    >
+                      🗑️ O‘chirish
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
         </main>
       </div>
 
+      {/* Mahsulot modal */}
       {showModal && (
         <div
           className="modal-backdrop"
@@ -435,16 +554,81 @@ export default function AdminPage() {
             <button
               onClick={handleSaveProduct}
               style={{
-                background: editingProduct ? "#3b82f6" : "#16a34a",
-                color: "white",
-                padding: "10px 20px",
+                background: "#2563eb",
+                color: "#fff",
                 border: "none",
-                borderRadius: "8px",
-                marginTop: "10px",
-                cursor: "pointer",
+                padding: "8px 16px",
+                borderRadius: 8,
               }}
             >
-              {editingProduct ? "💾 Yangilash" : "➕ Qo‘shish"}
+              💾 Saqlash
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Blog modal */}
+      {showBlogModal && (
+        <div
+          className="modal-backdrop"
+          onClick={() => setShowBlogModal(false)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: "#fff",
+              padding: 20,
+              borderRadius: 10,
+              width: 350,
+              textAlign: "center",
+            }}
+          >
+            <h3>📝 Yangi Blog Qo‘shish</h3>
+            <input
+              type="text"
+              placeholder="Rasm URL"
+              value={newBlog.image}
+              onChange={(e) =>
+                setNewBlog({ ...newBlog, image: e.target.value })
+              }
+              style={{ width: "100%", margin: "8px 0", padding: "8px" }}
+            />
+            <input
+              type="text"
+              placeholder="Sarlavha"
+              value={newBlog.title}
+              onChange={(e) =>
+                setNewBlog({ ...newBlog, title: e.target.value })
+              }
+              style={{ width: "100%", margin: "8px 0", padding: "8px" }}
+            />
+            <textarea
+              placeholder="Matn"
+              value={newBlog.content}
+              onChange={(e) =>
+                setNewBlog({ ...newBlog, content: e.target.value })
+              }
+              style={{ width: "100%", margin: "8px 0", padding: "8px" }}
+            />
+            <button
+              onClick={handleAddBlog}
+              style={{
+                background: "#2563eb",
+                color: "#fff",
+                border: "none",
+                padding: "8px 16px",
+                borderRadius: 8,
+              }}
+            >
+              💾 Saqlash
             </button>
           </div>
         </div>

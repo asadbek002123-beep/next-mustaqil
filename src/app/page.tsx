@@ -252,7 +252,7 @@ export default function Home() {
             lager <br /> anjomlarigacha, hammasi sizning tajribangizni
             yuksaltirish uchun.
           </p>
-          <button onClick={() => router.push("/About")}>Xarid qiling</button>
+          <button onClick={() => router.push("/Product")}>Xarid qiling</button>
         </div>
 
         <Image
@@ -291,7 +291,7 @@ export default function Home() {
               {"⭐".repeat(Math.round(p.rating))} <span>{p.rating}/5</span>
             </div>
             <p className="price">${p.price}</p>
-            <button className="add-btn" onClick={() => router.push("/About")}>
+            <button className="add-btn" onClick={() => router.push("/Product")}>
               Add to Cart
             </button>
           </div>
@@ -299,7 +299,10 @@ export default function Home() {
       </div>
 
       <div className="view-all-container">
-        <button className="view-all-btn" onClick={() => router.push("/About")}>
+        <button
+          className="view-all-btn"
+          onClick={() => router.push("/Product")}
+        >
           Hammasini ko‘rish →
         </button>
       </div>
