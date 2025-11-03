@@ -7,7 +7,7 @@ import { db } from "../../firebase/firebase.config";
 
 interface Blog {
   sarlavxa: string;
-  muallif: string;
+  Muallif: string;
   kontent: string;
   rasm: string;
 }
@@ -19,10 +19,16 @@ export default function BlogPage() {
   useEffect(() => {
     const getBlog = async () => {
       if (!id) return;
-      const docRef = doc(db, "blog", id as string);
+      const docRef = doc(db, "blogs", id as string);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        setBlog(docSnap.data() as Blog);
+        const d = docSnap.data();
+        setBlog({
+          sarlavxa: d.title || "",
+          Muallif: d.Muallif || "",
+          kontent: d.content || "",
+          rasm: d.image || "",
+        });
       }
     };
     getBlog();
@@ -38,7 +44,7 @@ export default function BlogPage() {
         style={{ width: "100%", borderRadius: "8px" }}
       />
       <h1>{blog.sarlavxa}</h1>
-      <p style={{ color: "#777" }}>Muallif: {blog.muallif}</p>
+      <p style={{ color: "#777" }}>Muallif: {blog.Muallif}</p>
       <p style={{ marginTop: "20px" }}>{blog.kontent}</p>
     </div>
   );

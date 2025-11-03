@@ -39,6 +39,7 @@ export default function AdminPage() {
     title: "",
     content: "",
     image: "",
+    Muallif: "",
   });
 
   useEffect(() => {
@@ -155,7 +156,7 @@ export default function AdminPage() {
       const added = { id: docRef.id, ...blogItem };
       setBlogs([...blogs, added]);
       setShowBlogModal(false);
-      setNewBlog({ title: "", content: "", image: "" });
+      setNewBlog({ title: "", content: "", image: "", Muallif: "", });
     } catch (err) {
       console.error("Blog qo‘shishda xato:", err);
     }
@@ -598,6 +599,15 @@ export default function AdminPage() {
               value={newBlog.image}
               onChange={(e) =>
                 setNewBlog({ ...newBlog, image: e.target.value })
+              }
+              style={{ width: "100%", margin: "8px 0", padding: "8px" }}
+            />
+            <input
+              type="text"
+              placeholder="Mualif"
+              value={newBlog.Muallif}
+              onChange={(e) =>
+                setNewBlog({ ...newBlog, Muallif: e.target.value })
               }
               style={{ width: "100%", margin: "8px 0", padding: "8px" }}
             />

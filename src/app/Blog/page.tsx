@@ -8,7 +8,7 @@ import BlogCard from "../../companents/blogcart";
 interface Blog {
   id: string;
   sarlavxa: string;
-  muallif: string;
+  Muallif: string;
   kontent: string;
   rasm: string;
 }
@@ -18,11 +18,17 @@ export default function BlogListPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const snap = await getDocs(collection(db, "blog"));
-      const data = snap.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as Blog[];
+      const snap = await getDocs(collection(db, "blogs"));
+      const data = snap.docs.map((doc) => {
+        const d = doc.data();
+        return {
+          id: doc.id,
+          sarlavxa: d.title || "",
+          Muallif: d.Muallif || "",
+          kontent: d.content || "",
+          rasm: d.image || "",
+        };
+      }) as Blog[];
       setBlogs(data);
     };
     fetchData();
